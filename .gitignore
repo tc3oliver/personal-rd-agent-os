@@ -1,0 +1,50 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+.venv/
+venv/
+env/
+ENV/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+.env
+.env.local
+.env.*.local
+
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data — keep folders via .gitkeep
+data/lancedb/*
+!data/lancedb/.gitkeep
+data/sqlite/*
+!data/sqlite/.gitkeep
+data/traces/*
+!data/traces/.gitkeep
+data/reports/*
+!data/reports/.gitkeep
+
+# uv lock — keep tracked
+# uv.lock
+
+# OMC state — local only
+.omc/state/
+.omc/notepad.md

@@ -1,0 +1,59 @@
+# Model profiles for RDOS Model Router
+# Each profile declares provider + target model + privacy eligibility.
+
+profiles:
+  local_fast:
+    provider: local
+    base_url: ${LOCAL_LLM_BASE_URL}
+    model: ${LOCAL_LLM_MODEL}
+    api_key_env: LOCAL_LLM_API_KEY
+    max_tokens: 4096
+    temperature: 0.3
+    allows_tools: false
+    description: "Local llama.cpp model for low-risk / private tasks"
+
+  cloud_reasoning:
+    provider: cloud
+    base_url: https://api.openai.com/v1
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 8192
+    temperature: 0.2
+    allows_tools: true
+    description: "Cloud reasoning model for public synthesis"
+
+  long_context:
+    provider: cloud
+    base_url: https://api.openai.com/v1
+    model: gpt-4o-128k
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 16384
+    temperature: 0.2
+    allows_tools: true
+    description: "Long-context cloud model"
+
+  code_specialist:
+    provider: cloud
+    base_url: https://api.openai.com/v1
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 8192
+    temperature: 0.1
+    allows_tools: true
+    description: "Cloud code-specialist model"
+
+# Task-type → default profile (used by ModelRouter as a starting point)
+task_defaults:
+  research_memory: local_fast
+  research_synthesis: cloud_reasoning
+  daily_digest: local_fast
+  technical_writing: cloud_reasoning
+  code_analysis: code_specialist
+
+# Embedding provider config
+embedding:
+  provider: fake  # fake | local | openai
+  base_url: ${LOCAL_EMBED_BASE_URL}
+  model: ${LOCAL_EMBED_MODEL}
+  api_key_env: LOCAL_EMBED_API_KEY
+  dim: 1024

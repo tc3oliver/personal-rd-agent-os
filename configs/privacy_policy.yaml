@@ -1,0 +1,46 @@
+# Privacy policy — drives PrivacyRouter + ModelRouter decisions
+
+# Privacy order (low → high). Effective privacy = max across all sources.
+privacy_order:
+  - public
+  - private_summary
+  - private_raw
+  - company_sensitive
+
+# Default privacy when frontmatter missing
+default_chunk_privacy: private_raw
+default_query_privacy: private_raw
+
+# Per-level rules
+rules:
+  public:
+    allow_external_model: true
+    requires_user_confirmation: false
+  private_summary:
+    allow_external_model: true
+    requires_user_confirmation: true   # escalation needs confirmation
+  private_raw:
+    allow_external_model: false
+    requires_user_confirmation: false
+  company_sensitive:
+    allow_external_model: false
+    requires_user_confirmation: false
+
+# Keyword heuristics for query privacy assessment (very small seed list;
+# real classification is the ModelRouter/PrivacyRouter's job).
+query_privacy_hints:
+  public:
+    - definition
+    - example
+    - public
+  private_summary:
+    - my notes
+    - my draft
+  private_raw:
+    - my journal
+    - personal
+  company_sensitive:
+    - internal
+    - confidential
+    - salary
+    - roadmap

@@ -1,0 +1,41 @@
+# Tool permission policy — gates which tools may be invoked at which privacy level.
+# Placeholder for later batches; Batch 0 just defines the schema.
+
+default_policy: deny   # allow | deny | confirm
+
+tools:
+  web_search:
+    description: "External web search"
+    allowed_privacy:
+      - public
+    requires_confirmation:
+      - private_summary
+    blocked_privacy:
+      - private_raw
+      - company_sensitive
+
+  filesystem_read:
+    description: "Read local files within workspace"
+    allowed_privacy:
+      - public
+      - private_summary
+      - private_raw
+      - company_sensitive
+
+  filesystem_write:
+    description: "Write local files within workspace"
+    allowed_privacy:
+      - public
+      - private_summary
+      - private_raw
+    requires_confirmation:
+      - company_sensitive
+
+  shell_exec:
+    description: "Execute shell commands"
+    requires_confirmation:
+      - public
+      - private_summary
+      - private_raw
+    blocked_privacy:
+      - company_sensitive

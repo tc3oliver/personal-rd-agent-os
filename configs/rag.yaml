@@ -1,0 +1,22 @@
+# RAG pipeline config
+
+chunking:
+  target_min_tokens: 300
+  target_max_tokens: 600
+  overlap_sentences: 1
+  token_estimator: char4   # char4 | tiktoken | llm
+
+retrieval:
+  top_k: 5
+  semantic_weight: 0.6
+  keyword_weight: 0.4
+  min_score: 0.10
+  rrf_k: 60                # Reciprocal Rank Fusion constant
+
+embedding:
+  dim: 1024
+  batch_size: 32
+
+storage:
+  sqlite_path: data/sqlite/rdos.db
+  lancedb_path: data/lancedb

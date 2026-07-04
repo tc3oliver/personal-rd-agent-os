@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import typer
 
+from rdos.cli.index import app as index_app
+
 app = typer.Typer(
     name="rdos",
     help="Personal R&D Agent OS — model-agnostic, privacy-aware, evaluation-driven.",
     no_args_is_help=True,
     add_completion=False,
 )
+
+app.add_typer(index_app, name="index")
 
 
 @app.command()
@@ -27,7 +31,6 @@ def hello() -> None:
 
 
 # Sub-apps will be registered by later batches:
-#   index   (Batch 3)
 #   search  (Batch 4)
 #   ask     (Batch 7)
 #   trace   (Batch 8)

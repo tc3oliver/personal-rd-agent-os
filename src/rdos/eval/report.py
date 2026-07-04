@@ -17,6 +17,15 @@ RELEASE_GATE = {
     "company_sensitive_leakage_rate": ("eq", 0.00),
 }
 
+# Batch 20: separate no-answer gate. Only enforced when threshold > 0
+# (i.e., when the user has explicitly calibrated the framework).
+# Foundation regression runs with no_answer_threshold=0, so no-answer
+# accuracy is undefined; this gate is opt-in via `rdos eval no-answer`.
+NO_ANSWER_GATE = {
+    "no_answer_accuracy": ("gte", 0.90),
+    "false_no_answer_rate": ("lte", 0.05),
+}
+
 
 def _gate_check(name: str, value: float) -> tuple[bool, str]:
     op, threshold = RELEASE_GATE[name]

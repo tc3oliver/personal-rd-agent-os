@@ -3,6 +3,12 @@
 Parses a Markdown note into a `DocumentMetadata` + body text. Does NOT
 split chunks (see `chunker.py`). Heading tree extraction is shared
 between parser and chunker.
+
+Batch 12 additions:
+- source_collection propagation
+- topic derived from folder name
+- title fallback: H1 → filename stem (not just stem)
+- date fallback: frontmatter → filename YYMMDD prefix → None
 """
 
 from __future__ import annotations
@@ -17,6 +23,8 @@ from rdos.schemas.document import DocumentMetadata
 from rdos.schemas.privacy import PrivacyLevel
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
+_DATE_PREFIX_RE = re.compile(r"^(\d{6})")
+_H1_RE = re.compile(r"^#\s+(.+?)\s*#*\s*$")
 
 
 def _parse_privacy_level(raw: object, default: PrivacyLevel) -> PrivacyLevel:
@@ -49,21 +57,60 @@ def _ensure_tags_list(raw: object) -> list[str]:
     return []
 
 
-def parse_markdown_text(text: str, file_path: str = "<inline>") -> tuple[DocumentMetadata, str]:
+def _filename_to_date(filename: str) -> str | None:
+    """Try YYMMDD prefix → YYYY-MM-DD."""
+    stem = Path(filename).stem
+    m = _DATE_PREFIX_RE.match(stem)
+    if not m:
+        return None
+    yy, mm, dd = m.group(1)[:2], m.group(1)[2:4], m.group(1)[4:6]
+    year = 2000 + int(yy)
+    if 1 <= int(mm) <= 12 and 1 <= int(dd) <= 31:
+        return f"{year:04d}-{mm}-{dd}"
+    return None
+
+
+def _filename_title(filename: str) -> str:
+    stem = Path(filename).stem
+    m = _DATE_PREFIX_RE.match(stem)
+    if m:
+        rest = stem[m.end():].lstrip("_- ")
+        return rest or stem
+    return stem
+
+
+def _h1_from_body(body: str) -> str | None:
+    for line in body.splitlines():
+        m = _H1_RE.match(line)
+        if m:
+            return m.group(1).strip()
+    return None
+
+
+def parse_markdown_text(
+    text: str,
+    file_path: str = "<inline>",
+    *,
+    source_collection: str | None = None,
+    topic: str | None = None,
+    privacy_default: PrivacyLevel = PrivacyLevel.private_raw,
+) -> tuple[DocumentMetadata, str]:
     """Parse Markdown text into (DocumentMetadata, body).
 
-    Body is the Markdown minus the frontmatter. Headings are NOT split here.
+    `source_collection` and `topic` are propagated as-is; if absent,
+    they remain empty strings on the metadata object.
     """
     post = frontmatter.loads(text)
     meta = post.metadata
     body = post.content
 
-    title = str(meta.get("title") or "").strip() or Path(file_path).stem
-    date = str(meta.get("date") or "").strip() or None
+    title_raw = str(meta.get("title") or "").strip()
+    title = title_raw if title_raw else _h1_from_body(body) or _filename_title(file_path)
+    date = str(meta.get("date") or "").strip() or _filename_to_date(file_path)
     tags = _ensure_tags_list(meta.get("tags"))
     privacy = _parse_privacy_level(
         meta.get("privacy_level"),
-        default=PrivacyLevel.private_raw,
+        default=privacy_default,
     )
     content_hash = _compute_content_hash(body)
     doc_id = _stable_doc_id(Path(file_path), content_hash)
@@ -77,15 +124,29 @@ def parse_markdown_text(text: str, file_path: str = "<inline>") -> tuple[Documen
             tags=tags,
             privacy_level=privacy,
             content_hash=content_hash,
+            source_collection=source_collection or "",
+            topic=topic or "",
         ),
         body,
     )
 
 
-def parse_markdown_file(path: str | Path) -> tuple[DocumentMetadata, str]:
+def parse_markdown_file(
+    path: str | Path,
+    *,
+    source_collection: str | None = None,
+    topic: str | None = None,
+    privacy_default: PrivacyLevel = PrivacyLevel.private_raw,
+) -> tuple[DocumentMetadata, str]:
     p = Path(path)
     text = p.read_text(encoding="utf-8")
-    return parse_markdown_text(text, file_path=str(p))
+    return parse_markdown_text(
+        text,
+        file_path=str(p),
+        source_collection=source_collection,
+        topic=topic,
+        privacy_default=privacy_default,
+    )
 
 
 def extract_heading_tree(body: str) -> list[tuple[int, str]]:
@@ -111,3 +172,18 @@ def render_markdown_for_chunk(text: str) -> str:
         if tok.type == "inline" or tok.type in ("fence", "code_block"):
             parts.append(tok.content)
     return "\n".join(parts).strip()
+
+
+def derive_topic_from_path(file_path: str | Path, root: str | Path | None) -> str:
+    """Topic = first folder name under root, or top-level folder name."""
+    fp = Path(file_path)
+    if root is not None:
+        try:
+            rel = fp.relative_to(root)
+            parts = rel.parts
+            if len(parts) >= 2 and parts[-1]:  # file is in a subfolder
+                return parts[0]
+        except ValueError:
+            pass
+    parents = [p for p in fp.parts if p and p not in (".", "/")]
+    return parents[-2] if len(parents) >= 2 else ""

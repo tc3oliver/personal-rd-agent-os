@@ -199,6 +199,8 @@ def chunk_document(
                 privacy_level=meta.privacy_level,
                 tags=list(meta.tags),
                 date=meta.date,
+                source_collection=getattr(meta, "source_collection", "") or "",
+                topic=getattr(meta, "topic", "") or "",
             )
         )
 

@@ -82,7 +82,9 @@ def test_index_is_idempotent(isolated_workspace: Path, sample_notes_dir: Path) -
 
     assert first.chunks_inserted > 0
     assert second.chunks_inserted == 0
-    assert second.chunks_skipped == first.chunks_inserted
+    # Batch 12: incremental index short-circuits at content_hash check,
+    # so unchanged docs are counted in documents_unchanged (not chunks_skipped).
+    assert second.documents_unchanged == first.documents_indexed
     # Re-index should produce identical chunk counts in stores
     assert first.documents_indexed == second.documents_indexed
 

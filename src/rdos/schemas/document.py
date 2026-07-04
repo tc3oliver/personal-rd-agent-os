@@ -18,6 +18,11 @@ class DocumentMetadata(BaseModel):
     privacy_level: PrivacyLevel = PrivacyLevel.private_raw
     content_hash: str
     indexed_at: str | None = None
+    # Batch 12: corpus provenance
+    source_collection: str = ""
+    topic: str = ""
+    stale: bool = False
+    last_modified: float | None = None
 
 
 class DocumentChunk(BaseModel):
@@ -35,6 +40,9 @@ class DocumentChunk(BaseModel):
     privacy_level: PrivacyLevel = PrivacyLevel.private_raw
     tags: list[str] = Field(default_factory=list)
     date: str | None = None
+    # Batch 12: corpus provenance (propagated from parent doc)
+    source_collection: str = ""
+    topic: str = ""
 
     # Filled by retriever
     score: float | None = None

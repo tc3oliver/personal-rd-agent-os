@@ -60,6 +60,8 @@ body
 
 
 def test_title_falls_back_to_filename_when_missing() -> None:
+    # Batch 12: H1 takes priority over filename; title only falls back to
+    # filename when BOTH frontmatter and H1 are missing.
     text = """---
 date: 2026-07-05
 ---
@@ -69,6 +71,11 @@ date: 2026-07-05
 text
 """
     meta, _ = parse_markdown_text(text, file_path="my-note.md")
+    assert meta.title == "Heading"
+
+
+def test_title_falls_back_to_filename_only_when_no_h1() -> None:
+    meta, _ = parse_markdown_text("no heading here", file_path="my-note.md")
     assert meta.title == "my-note"
 
 

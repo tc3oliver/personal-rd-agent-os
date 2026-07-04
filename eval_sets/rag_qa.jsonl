@@ -1,0 +1,10 @@
+{"query": "RAG filtering 是什麼？", "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "expected_keywords": ["metadata", "semantic", "filter"]}
+{"query": "為什麼需要 filtering", "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "expected_keywords": ["recall", "precision", "noise"]}
+{"query": "metadata filter 用法", "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "expected_keywords": ["metadata", "filter"]}
+{"query": "structured output 方法", "expected_doc_ids": ["sample_data/notes/structured_output.md"], "expected_keywords": ["json", "validation", "pydantic"]}
+{"query": "validation 失敗如何處理", "expected_doc_ids": ["sample_data/notes/structured_output.md"], "expected_keywords": ["retry", "structured", "error"]}
+{"query": "agent loop node granularity", "expected_doc_ids": ["sample_data/notes/agent_loop.md"], "expected_keywords": ["node", "graph", "state"]}
+{"query": "trace 用途", "expected_doc_ids": ["sample_data/notes/agent_loop.md"], "expected_keywords": ["trace", "node", "latency"]}
+{"query": "privacy 等級", "expected_doc_ids": ["sample_data/notes/privacy_routing.md"], "expected_keywords": ["public", "private_raw", "company_sensitive"]}
+{"query": "哪些資料算 company_sensitive", "expected_doc_ids": ["sample_data/notes/privacy_routing.md"], "expected_keywords": ["roadmap", "salary", "internal"]}
+{"query": "daily digest 內容", "expected_doc_ids": ["sample_data/notes/daily_digest_2026-07-04.md"], "expected_keywords": ["filtering", "routing"]}

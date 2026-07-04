@@ -76,6 +76,8 @@ def _build_sections(body: str) -> list[tuple[list[str], str]]:
                     path.append(title)
                 else:
                     path[level - 1] = title
+                # Include the heading text in the section so keyword search can match it
+                current_lines.append(title)
                 continue
         current_lines.append(line)
 

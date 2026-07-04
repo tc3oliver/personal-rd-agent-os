@@ -1,0 +1,10 @@
+{"task_type": "research_memory", "privacy_level": "private_raw", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "research_memory", "privacy_level": "company_sensitive", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "research_synthesis", "privacy_level": "public", "expected_profile": "cloud_reasoning", "expected_provider": "cloud"}
+{"task_type": "research_synthesis", "privacy_level": "private_summary", "expected_profile": "cloud_reasoning", "expected_provider": "cloud", "expected_confirmation": true}
+{"task_type": "research_synthesis", "privacy_level": "private_raw", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "code_analysis", "privacy_level": "company_sensitive", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "research_memory", "privacy_level": "public", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "technical_writing", "privacy_level": "public", "expected_profile": "cloud_reasoning", "expected_provider": "cloud"}
+{"task_type": "daily_digest", "privacy_level": "private_summary", "expected_profile": "local_fast", "expected_provider": "local"}
+{"task_type": "research_synthesis", "privacy_level": "private_summary", "expected_profile": "cloud_reasoning", "expected_provider": "cloud", "expected_confirmation": true}

@@ -1,0 +1,10 @@
+{"query": "RAG filtering 是什麼？", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "must_cite_at_least": 1}
+{"query": "metadata filter", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "must_cite_at_least": 1}
+{"query": "structured output", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/structured_output.md"], "must_cite_at_least": 1}
+{"query": "agent loop pattern", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/agent_loop.md"], "must_cite_at_least": 1}
+{"query": "privacy routing", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/privacy_routing.md"], "must_cite_at_least": 1}
+{"query": "daily digest", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/daily_digest_2026-07-04.md"], "must_cite_at_least": 1}
+{"query": "validation retry", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/structured_output.md"], "must_cite_at_least": 1}
+{"query": "effective privacy", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/privacy_routing.md"], "must_cite_at_least": 1}
+{"query": "node granularity", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/agent_loop.md"], "must_cite_at_least": 1}
+{"query": "hybrid filter", "expected_chunk_hashes_any": [], "expected_doc_ids": ["sample_data/notes/rag_filtering.md"], "must_cite_at_least": 1}

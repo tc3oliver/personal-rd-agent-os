@@ -1,0 +1,10 @@
+{"query_privacy": "public", "retrieved_privacy": ["public"], "expected_effective": "public", "must_local": false, "external_allowed": true}
+{"query_privacy": "private_raw", "retrieved_privacy": ["public"], "expected_effective": "private_raw", "must_local": true, "external_allowed": false}
+{"query_privacy": "public", "retrieved_privacy": ["private_raw"], "expected_effective": "private_raw", "must_local": true, "external_allowed": false}
+{"query_privacy": "public", "retrieved_privacy": ["company_sensitive"], "expected_effective": "company_sensitive", "must_local": true, "external_allowed": false}
+{"query_privacy": "private_summary", "retrieved_privacy": ["public"], "expected_effective": "private_summary", "must_local": false, "external_allowed": true}
+{"query_privacy": "company_sensitive", "retrieved_privacy": ["public"], "expected_effective": "company_sensitive", "must_local": true, "external_allowed": false}
+{"query_privacy": "public", "retrieved_privacy": ["private_summary"], "expected_effective": "private_summary", "must_local": false, "external_allowed": true}
+{"query_privacy": "private_summary", "retrieved_privacy": ["private_raw"], "expected_effective": "private_raw", "must_local": true, "external_allowed": false}
+{"query_privacy": "private_raw", "retrieved_privacy": ["company_sensitive"], "expected_effective": "company_sensitive", "must_local": true, "external_allowed": false}
+{"query_privacy": "public", "retrieved_privacy": [], "expected_effective": "public", "must_local": false, "external_allowed": true}

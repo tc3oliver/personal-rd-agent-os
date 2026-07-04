@@ -26,6 +26,12 @@ NO_ANSWER_GATE = {
     "false_no_answer_rate": ("lte", 0.05),
 }
 
+# Batch 21: redaction gate. Opt-in via `rdos eval redaction`.
+REDACTION_GATE = {
+    "redaction_recall": ("gte", 0.95),
+    "redaction_precision": ("gte", 0.95),
+}
+
 
 def _gate_check(name: str, value: float) -> tuple[bool, str]:
     op, threshold = RELEASE_GATE[name]

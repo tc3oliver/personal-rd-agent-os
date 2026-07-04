@@ -48,7 +48,7 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "TID"]
-ignore = ["E501"]  # let line-length be advisory; formatter handles most cases
+ignore = ["E501", "SIM103", "SIM102"]  # cosmetic if/return style preferences
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B011"]  # allow assert False in tests

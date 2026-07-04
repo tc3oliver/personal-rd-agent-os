@@ -14,15 +14,18 @@ import pyarrow as pa
 
 from rdos.schemas.document import DocumentChunk
 
-SCHEMA = pa.schema(
-    [
-        pa.field("chunk_id", pa.string()),
-        pa.field("chunk_hash", pa.string()),
-        pa.field("doc_id", pa.string()),
-        pa.field("heading_path", pa.string()),  # JSON
-        pa.field("vector", pa.list_(pa.float32(), -1)),
-    ]
-)
+
+def _schema_for(dim: int) -> pa.Schema:
+    """Fixed-size list schema so LanceDB recognizes the vector column."""
+    return pa.schema(
+        [
+            pa.field("chunk_id", pa.string()),
+            pa.field("chunk_hash", pa.string()),
+            pa.field("doc_id", pa.string()),
+            pa.field("heading_path", pa.string()),  # JSON
+            pa.field("vector", pa.list_(pa.float32(), dim)),
+        ]
+    )
 
 
 class LanceVectorStore:
@@ -42,7 +45,7 @@ class LanceVectorStore:
     def _ensure_table(self) -> None:
         existing = self._db.table_names()
         if self.table_name not in existing:
-            self._db.create_table(self.table_name, schema=SCHEMA)
+            self._db.create_table(self.table_name, schema=_schema_for(self.dim))
 
     # ----- writes -----
 
@@ -63,7 +66,7 @@ class LanceVectorStore:
         existing_hashes = self._existing_hashes(tbl)
 
         rows: list[dict[str, Any]] = []
-        import json
+        import json as _json
 
         for chunk, vec in zip(chunks, embeddings, strict=True):
             if chunk.chunk_hash in existing_hashes:
@@ -77,7 +80,7 @@ class LanceVectorStore:
                     "chunk_id": chunk.chunk_id,
                     "chunk_hash": chunk.chunk_hash,
                     "doc_id": chunk.doc_id,
-                    "heading_path": json.dumps(chunk.heading_path),
+                    "heading_path": _json.dumps(chunk.heading_path),
                     "vector": [float(x) for x in vec],
                 }
             )
@@ -98,7 +101,7 @@ class LanceVectorStore:
         query_vec: list[float],
         top_k: int = 5,
     ) -> list[tuple[str, float]]:
-        """Vector search. Returns list of (chunk_id, score)."""
+        """Vector search. Returns list of (chunk_id, distance)."""
         if len(query_vec) != self.dim:
             raise ValueError(
                 f"query vector dim mismatch: got {len(query_vec)}, expected {self.dim}"

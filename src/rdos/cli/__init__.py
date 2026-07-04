@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typer
 
+from rdos.cli.approval import app as approval_app
 from rdos.cli.ask import app as ask_app
 from rdos.cli.benchmark import app as benchmark_app
 from rdos.cli.corpus import app as corpus_app
@@ -32,6 +33,7 @@ app.add_typer(doctor_app, name="doctor")
 app.add_typer(benchmark_app, name="benchmark")
 app.add_typer(tool_app, name="tool")
 app.add_typer(research_apps_app, name="research")
+app.add_typer(approval_app, name="approval")
 
 
 @app.command()

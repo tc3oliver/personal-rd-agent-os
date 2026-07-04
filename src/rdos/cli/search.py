@@ -27,18 +27,22 @@ def search_cmd(
         "--privacy",
         help="Comma-separated privacy filter (e.g. public,private_summary)",
     ),
+    embedding_provider: str = typer.Option(
+        None,
+        "--embedding-provider",
+        help="fake | local-bge-m3 (default: from config)",
+    ),
 ) -> None:
     """Run hybrid search over the indexed chunks."""
     cfg = get_config()
+    provider_name = embedding_provider or cfg.models.embedding.provider
+    dim = cfg.models.embedding.dim or cfg.rag.embedding.dim
     store = SqliteMetadataStore(cfg.rag.storage.sqlite_path)
-    vectors = LanceVectorStore(
-        cfg.rag.storage.lancedb_path,
-        dim=cfg.models.embedding.dim or cfg.rag.embedding.dim,
-    )
-    embedding = build_embedding_provider(
-        provider=cfg.models.embedding.provider,
-        dim=cfg.models.embedding.dim or cfg.rag.embedding.dim,
-    )
+    vectors = LanceVectorStore(cfg.rag.storage.lancedb_path, dim=dim)
+    embedding = build_embedding_provider(provider_name, dim=dim)
+
+    # Provider mismatch must be a hard error, not a silent empty result.
+    vectors.ensure_provider_compatible(embedding)
 
     from rdos.rag.hybrid_search import RetrievalFilters
 
@@ -75,7 +79,7 @@ def search_cmd(
             c.title,
             " > ".join(c.heading_path) or "-",
             f"{c.score or 0:.4f}",
-            "",  # privacy filled from chunk
+            "",
             c.chunk_id[:12],
         )
     console.print(table)

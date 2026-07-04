@@ -18,13 +18,18 @@ console = Console()
 def index_cmd(
     path: str = typer.Argument(..., help="Directory containing .md files"),
     reset: bool = typer.Option(False, "--reset", help="Drop LanceDB table before indexing"),
+    embedding_provider: str = typer.Option(
+        None,
+        "--embedding-provider",
+        help="fake | local-bge-m3 (default: from config)",
+    ),
 ) -> None:
     """Scan PATH for .md files and index them."""
     if not Path(path).exists():
         console.print(f"[red]Path not found:[/red] {path}")
         raise typer.Exit(code=2)
 
-    stats = index_directory(path, reset=reset)
+    stats = index_directory(path, reset=reset, embedding_provider=embedding_provider)
 
     table = Table(title="Index Result")
     table.add_column("Metric", style="cyan")
@@ -34,5 +39,8 @@ def index_cmd(
     table.add_row("Skipped (duplicate)", str(stats.chunks_skipped))
     table.add_row("SQLite path", stats.sqlite_path)
     table.add_row("LanceDB path", stats.lancedb_path)
+    table.add_row("Embedding provider", stats.embedding_provider or "?")
+    table.add_row("Embedding model", stats.embedding_model or "?")
+    table.add_row("Embedding dim", str(stats.embedding_dim or "?"))
     table.add_row("Elapsed (ms)", str(stats.elapsed_ms))
     console.print(table)

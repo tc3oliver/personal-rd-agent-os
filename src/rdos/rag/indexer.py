@@ -24,6 +24,9 @@ class IndexStats:
     sqlite_path: str
     lancedb_path: str
     elapsed_ms: int
+    embedding_provider: str = ""
+    embedding_model: str = ""
+    embedding_dim: int = 0
 
 
 def _now_iso() -> str:
@@ -35,6 +38,7 @@ def index_directory(
     config: RdosConfig | None = None,
     *,
     embedding: EmbeddingProvider | None = None,
+    embedding_provider: str | None = None,
     reset: bool = False,
 ) -> IndexStats:
     """Index every `.md` under `root`.
@@ -53,21 +57,26 @@ def index_directory(
     sqlite_path = cfg.rag.storage.sqlite_path
     lancedb_path = cfg.rag.storage.lancedb_path
     dim = cfg.models.embedding.dim or cfg.rag.embedding.dim
+    provider_name = embedding_provider or cfg.models.embedding.provider
 
     store = SqliteMetadataStore(sqlite_path)
     if embedding is None:
         embedding = build_embedding_provider(
-            provider=cfg.models.embedding.provider,
+            provider=provider_name,
             dim=dim,
         )
     else:
-        # Trust the injected provider's dim if it exposes one.
         provider_dim = getattr(embedding, "dim", None)
         if provider_dim:
             dim = provider_dim
+
     vector_store = LanceVectorStore(lancedb_path, dim=dim)
     if reset:
         vector_store.drop_table()
+
+    # Provider mismatch check (no silent drift).
+    vector_store.ensure_provider_compatible(embedding)
+    vector_store.write_provider_meta(embedding)
 
     docs_indexed = 0
     chunks_inserted = 0
@@ -114,4 +123,7 @@ def index_directory(
         sqlite_path=str(sqlite_path),
         lancedb_path=str(lancedb_path),
         elapsed_ms=elapsed,
+        embedding_provider=embedding.name,
+        embedding_model=embedding.model,
+        embedding_dim=int(embedding.dim),
     )

@@ -1,18 +1,29 @@
-"""LanceDB vector store wrapper.
+"""LanceDB vector store wrapper with provider metadata.
 
-Stores chunk embeddings plus a chunk_id pointer. The LanceDB table mirrors
-chunk_hash for idempotent re-index (delete-then-insert keyed by chunk_hash).
+Embedding provider metadata (name / model / dim) is stored alongside the
+vector schema. On search, mismatched provider/dim raises a typed error
+instead of silently returning garbage.
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
 import lancedb
 import pyarrow as pa
 
+from rdos.rag.embedding import EmbeddingProvider
 from rdos.schemas.document import DocumentChunk
+
+
+class EmbeddingProviderMismatchError(Exception):
+    """Raised when query provider ≠ index provider."""
+
+
+class EmbeddingDimensionMismatchError(Exception):
+    """Raised when query embedding dim ≠ index dim."""
 
 
 def _schema_for(dim: int) -> pa.Schema:
@@ -22,10 +33,14 @@ def _schema_for(dim: int) -> pa.Schema:
             pa.field("chunk_id", pa.string()),
             pa.field("chunk_hash", pa.string()),
             pa.field("doc_id", pa.string()),
-            pa.field("heading_path", pa.string()),  # JSON
+            pa.field("heading_path", pa.string()),
             pa.field("vector", pa.list_(pa.float32(), dim)),
         ]
     )
+
+
+META_TABLE = "_embedding_meta"
+META_KEYS = ("embedding_provider", "embedding_model", "embedding_dim")
 
 
 class LanceVectorStore:
@@ -47,6 +62,44 @@ class LanceVectorStore:
         if self.table_name not in existing:
             self._db.create_table(self.table_name, schema=_schema_for(self.dim))
 
+    # ----- metadata -----
+
+    def write_provider_meta(self, provider: EmbeddingProvider) -> None:
+        """Persist provider identity so future search/ingest can detect mismatch."""
+        meta_path = self.path / f"{META_TABLE}.json"
+        payload = {
+            "embedding_provider": provider.name,
+            "embedding_model": provider.model,
+            "embedding_dim": int(provider.dim),
+        }
+        meta_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    def read_provider_meta(self) -> dict[str, Any]:
+        meta_path = self.path / f"{META_TABLE}.json"
+        if not meta_path.exists():
+            return {}
+        try:
+            return json.loads(meta_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            return {}
+
+    def ensure_provider_compatible(self, provider: EmbeddingProvider) -> None:
+        """Raise if `provider` doesn't match the index's stored metadata."""
+        meta = self.read_provider_meta()
+        if not meta:
+            # First ingestion: nothing to check.
+            return
+        if meta.get("embedding_provider") not in (None, provider.name):
+            raise EmbeddingProviderMismatchError(
+                f"index provider={meta['embedding_provider']!r} but query provider={provider.name!r}; "
+                "reindex with the new provider or switch back."
+            )
+        if int(meta.get("embedding_dim", -1)) != int(provider.dim):
+            raise EmbeddingDimensionMismatchError(
+                f"index dim={meta['embedding_dim']} but query dim={provider.dim}; "
+                "reindex with the new dim."
+            )
+
     # ----- writes -----
 
     def upsert_chunks(
@@ -54,10 +107,6 @@ class LanceVectorStore:
         chunks: list[DocumentChunk],
         embeddings: list[list[float]],
     ) -> int:
-        """Insert chunks that are not already present (by chunk_hash).
-
-        Returns number of rows actually inserted.
-        """
         if not chunks:
             return 0
         if len(chunks) != len(embeddings):
@@ -66,8 +115,6 @@ class LanceVectorStore:
         existing_hashes = self._existing_hashes(tbl)
 
         rows: list[dict[str, Any]] = []
-        import json as _json
-
         for chunk, vec in zip(chunks, embeddings, strict=True):
             if chunk.chunk_hash in existing_hashes:
                 continue
@@ -80,7 +127,7 @@ class LanceVectorStore:
                     "chunk_id": chunk.chunk_id,
                     "chunk_hash": chunk.chunk_hash,
                     "doc_id": chunk.doc_id,
-                    "heading_path": _json.dumps(chunk.heading_path),
+                    "heading_path": json.dumps(chunk.heading_path),
                     "vector": [float(x) for x in vec],
                 }
             )
@@ -101,9 +148,8 @@ class LanceVectorStore:
         query_vec: list[float],
         top_k: int = 5,
     ) -> list[tuple[str, float]]:
-        """Vector search. Returns list of (chunk_id, distance)."""
         if len(query_vec) != self.dim:
-            raise ValueError(
+            raise EmbeddingDimensionMismatchError(
                 f"query vector dim mismatch: got {len(query_vec)}, expected {self.dim}"
             )
         tbl = self._db.open_table(self.table_name)
@@ -125,4 +171,7 @@ class LanceVectorStore:
     def drop_table(self) -> None:
         if self.table_name in self._db.table_names():
             self._db.drop_table(self.table_name)
+        meta_path = self.path / f"{META_TABLE}.json"
+        if meta_path.exists():
+            meta_path.unlink()
         self._ensure_table()

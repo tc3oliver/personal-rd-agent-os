@@ -5,6 +5,7 @@ from __future__ import annotations
 import typer
 
 from rdos.cli.ask import app as ask_app
+from rdos.cli.doctor import app as doctor_app
 from rdos.cli.eval import app as eval_app
 from rdos.cli.index import app as index_app
 from rdos.cli.search import app as search_app
@@ -22,6 +23,7 @@ app.add_typer(search_app, name="search")
 app.add_typer(ask_app, name="ask")
 app.add_typer(trace_app, name="trace")
 app.add_typer(eval_app, name="eval")
+app.add_typer(doctor_app, name="doctor")
 
 
 @app.command()

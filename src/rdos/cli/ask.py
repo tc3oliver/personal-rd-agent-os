@@ -7,6 +7,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from rdos.config import get_config
+from rdos.graph.langgraph_runtime import build_langgraph_runtime
 from rdos.graph.research_memory_graph import build_research_memory_graph
 from rdos.llm.runtime_mode import resolve_llm
 from rdos.rag.embedding import build_embedding_provider
@@ -33,6 +34,11 @@ def ask_cmd(
         "--embedding-provider",
         help="fake | local-bge-m3 (default: from config)",
     ),
+    graph_runtime: str = typer.Option(
+        "langgraph",
+        "--graph-runtime",
+        help="langgraph | linear (default: langgraph)",
+    ),
     no_trace: bool = typer.Option(False, "--no-trace", help="Skip writing to JSONL trace"),
 ) -> None:
     """Run the full research_memory pipeline and print the answer."""
@@ -53,19 +59,41 @@ def ask_cmd(
     if llm_decision.warning:
         console.print(f"[yellow]WARNING:[/yellow] {llm_decision.warning}")
 
-    graph = build_research_memory_graph(
-        config=cfg,
-        sqlite_store=store,
-        vector_store=vectors,
-        embedding=embedding,
-        llm=llm_decision.adapter,
-    )
     timer = Timer()
-    state = graph.run(question)
+    thread_id: str | None = None
+    node_trace: list[dict] = []
+    if graph_runtime == "langgraph":
+        runtime = build_langgraph_runtime(
+            config=cfg,
+            sqlite_store=store,
+            vector_store=vectors,
+            embedding=embedding,
+            llm=llm_decision.adapter,
+        )
+        state, thread_id = runtime.invoke(question)
+        node_trace = list(runtime.node_trace)
+    elif graph_runtime == "linear":
+        graph = build_research_memory_graph(
+            config=cfg,
+            sqlite_store=store,
+            vector_store=vectors,
+            embedding=embedding,
+            llm=llm_decision.adapter,
+        )
+        state = graph.run(question)
+    else:
+        console.print(
+            f"[red]Unknown --graph-runtime:[/red] {graph_runtime!r}; expected langgraph|linear"
+        )
+        raise typer.Exit(code=2)
+
     answer = state.get("final_answer")
 
     # Attach runtime/llm/embedding metadata to state for trace consumption.
     state.setdefault("runtime_meta", {})
+    state["runtime_meta"]["graph_runtime"] = graph_runtime
+    state["runtime_meta"]["thread_id"] = thread_id
+    state["runtime_meta"]["nodes"] = node_trace
     state["runtime_meta"]["requested_llm_mode"] = llm_mode
     state["runtime_meta"]["actual_llm_adapter"] = type(llm_decision.adapter).__name__
     state["runtime_meta"]["fallback_used"] = llm_decision.fallback_used
@@ -83,7 +111,6 @@ def ask_cmd(
             timestamp=now_iso(),
             metrics=TraceMetrics(latency_ms=timer.elapsed_ms()),
         )
-        # Annotate runtime metadata into the trace record.
         record.metrics.extra.update(state["runtime_meta"])
         trace_store.append(record)
 
@@ -112,16 +139,16 @@ def ask_cmd(
             )
         console.print(table)
 
-    console.print(
-        Panel.fit(
-            f"Model:    {answer.selected_model_profile}\n"
-            f"Privacy:  {answer.effective_privacy_level.value}\n"
-            f"Confidence: {answer.confidence:.2f}\n"
-            f"Run id:   {run_id[:12]}\n"
-            f"LLM mode: {llm_mode} → {type(llm_decision.adapter).__name__}"
-            + (" (fallback)" if llm_decision.fallback_used else ""),
-            title="Routing",
-        )
-    )
+    routing_lines = [
+        f"Model:    {answer.selected_model_profile}",
+        f"Privacy:  {answer.effective_privacy_level.value}",
+        f"Confidence: {answer.confidence:.2f}",
+        f"Run id:   {run_id[:12]}",
+        f"Runtime:  {graph_runtime}"
+        + (f" thread={thread_id[:12]}" if thread_id else ""),
+        f"LLM mode: {llm_mode} → {type(llm_decision.adapter).__name__}"
+        + (" (fallback)" if llm_decision.fallback_used else ""),
+    ]
+    console.print(Panel.fit("\n".join(routing_lines), title="Routing"))
 
     store.close()

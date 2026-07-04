@@ -13,6 +13,8 @@ from rdos.llm.provider import LLMAdapter, StubLLMAdapter
 from rdos.rag.embedding import build_embedding_provider
 from rdos.rag.storage_sqlite import SqliteMetadataStore
 from rdos.rag.vector_store import LanceVectorStore
+from rdos.trace.trace_logger import Timer, record_run
+from rdos.trace.trace_store import JsonlTraceStore
 
 app = typer.Typer(no_args_is_help=True, help="Ask the research_memory agent")
 console = Console()
@@ -35,6 +37,7 @@ def _resolve_llm(cfg, *, force_stub: bool) -> LLMAdapter:
 def ask_cmd(
     question: str = typer.Argument(..., help="Question to ask the research_memory agent"),
     stub: bool = typer.Option(False, "--stub", help="Force stub LLM even if local server is up"),
+    no_trace: bool = typer.Option(False, "--no-trace", help="Skip writing to JSONL trace"),
 ) -> None:
     """Run the full research_memory pipeline and print the answer."""
     cfg = get_config()
@@ -56,8 +59,15 @@ def ask_cmd(
         embedding=embedding,
         llm=llm,
     )
+    timer = Timer()
     state = graph.run(question)
     answer = state.get("final_answer")
+
+    if not no_trace:
+        trace_store = JsonlTraceStore("data/traces/runs.jsonl")
+        run_id = record_run(trace_store, state, timer=timer)
+    else:
+        run_id = "<trace-skipped>"
 
     if answer is None:
         console.print("[red]No answer produced.[/red]")
@@ -88,7 +98,8 @@ def ask_cmd(
         Panel.fit(
             f"Model:    {answer.selected_model_profile}\n"
             f"Privacy:  {answer.effective_privacy_level.value}\n"
-            f"Confidence: {answer.confidence:.2f}",
+            f"Confidence: {answer.confidence:.2f}\n"
+            f"Run id:   {run_id[:12]}",
             title="Routing",
         )
     )

@@ -1,8 +1,16 @@
-"""Hybrid retriever: semantic + keyword + metadata filter + RRF merge."""
+"""Hybrid retriever: semantic + keyword + metadata filter + RRF merge.
+
+Batch 13 additions:
+- query rewrite (alias expansion)
+- vector_top_k / keyword_top_k / rerank_top_k from config
+- min_score_threshold + no-answer flag
+- RetrievalResult.no_answer_triggered
+- RetrievalResult.rewrite_info
+"""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from rdos.config import RdosConfig
 from rdos.rag.embedding import EmbeddingProvider, build_embedding_provider
@@ -10,6 +18,7 @@ from rdos.rag.hybrid_search import (
     RetrievalFilters,
     reciprocal_rank_fusion,
 )
+from rdos.rag.query_rewriter import rewrite_query
 from rdos.rag.storage_sqlite import SqliteMetadataStore
 from rdos.rag.vector_store import LanceVectorStore
 from rdos.schemas.document import DocumentChunk
@@ -21,6 +30,9 @@ class RetrievalResult:
     raw_semantic: list[tuple[str, float]]
     raw_keyword: list[tuple[str, float]]
     merged_scores: dict[str, float]
+    rewrite_info: dict = field(default_factory=dict)
+    no_answer_triggered: bool = False
+    retrieval_latency_ms: int = 0
 
     @property
     def top_chunk(self) -> DocumentChunk | None:
@@ -51,15 +63,30 @@ class HybridRetriever:
         top_k: int | None = None,
         filters: RetrievalFilters | None = None,
     ) -> RetrievalResult:
+        import time
+
+        started = time.perf_counter()
         k = top_k or self.config.rag.retrieval.top_k
         f = filters or RetrievalFilters()
 
+        rewrite_info: dict = {}
+        primary_query = query
+        if self.config.rag.retrieval.enable_query_rewrite:
+            rewrite_info = rewrite_query(query, cfg=self.config.rag)
+            primary_query = rewrite_info["rewritten_queries"][0]
+
         # ----- Semantic -----
-        query_vec = self.embedding.embed_one(query)
-        semantic = self.vectors.search(query_vec, top_k=k * 4)
+        query_vec = self.embedding.embed_one(primary_query)
+        semantic = self.vectors.search(
+            query_vec,
+            top_k=self.config.rag.retrieval.vector_top_k,
+        )
 
         # ----- Keyword -----
-        keyword = self.store.keyword_search(query, limit=k * 4)
+        keyword = self.store.keyword_search(
+            primary_query,
+            limit=self.config.rag.retrieval.keyword_top_k,
+        )
 
         # ----- Merge -----
         merged = reciprocal_rank_fusion(
@@ -70,8 +97,11 @@ class HybridRetriever:
             keyword_weight=self.config.rag.retrieval.keyword_weight,
         )
 
-        # Rank by merged score, then hydrate + filter
-        ranked_ids = [cid for cid, _ in sorted(merged.items(), key=lambda kv: kv[1], reverse=True)]
+        ranked_ids = [
+            cid
+            for cid, _ in sorted(merged.items(), key=lambda kv: kv[1], reverse=True)
+        ]
+        rerank_top = self.config.rag.retrieval.rerank_top_k
         chunks: list[DocumentChunk] = []
         for cid in ranked_ids:
             chunk = self.store.get_chunk(cid)
@@ -81,14 +111,31 @@ class HybridRetriever:
                 continue
             chunk.score = float(merged.get(cid, 0.0))
             chunks.append(chunk)
-            if len(chunks) >= k:
+            if len(chunks) >= max(k, rerank_top):
                 break
 
+        chunks = chunks[: max(k, rerank_top)]
+
+        threshold = self.config.rag.retrieval.min_score_threshold
+        no_answer_threshold = self.config.rag.retrieval.no_answer_threshold
+        top_score = chunks[0].score if chunks else 0.0
+        no_answer = bool(chunks) and top_score < no_answer_threshold
+        if no_answer:
+            chunks = []
+
+        # Apply min_score_threshold as a soft cut (kept in result for caller).
+        if chunks and threshold > 0:
+            chunks = [c for c in chunks if (c.score or 0) >= threshold] or chunks
+
+        latency_ms = int((time.perf_counter() - started) * 1000)
         return RetrievalResult(
-            chunks=chunks,
+            chunks=chunks[:k],
             raw_semantic=semantic,
             raw_keyword=keyword,
             merged_scores=merged,
+            rewrite_info=rewrite_info,
+            no_answer_triggered=no_answer,
+            retrieval_latency_ms=latency_ms,
         )
 
 

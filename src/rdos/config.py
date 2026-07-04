@@ -88,6 +88,13 @@ class RetrievalConfig(BaseModel):
     keyword_weight: float = 0.4
     min_score: float = 0.10
     rrf_k: int = 60
+    # Batch 13: hybrid tuning knobs
+    vector_top_k: int = 20
+    keyword_top_k: int = 20
+    rerank_top_k: int = 8
+    min_score_threshold: float = 0.02
+    no_answer_threshold: float = 0.0   # 0 = disabled; Batch 17 adversarial may set > 0
+    enable_query_rewrite: bool = True
 
 
 class EmbeddingRuntimeConfig(BaseModel):
@@ -105,6 +112,8 @@ class RagConfig(BaseModel):
     retrieval: RetrievalConfig = Field(default_factory=RetrievalConfig)
     embedding: EmbeddingRuntimeConfig = Field(default_factory=EmbeddingRuntimeConfig)
     storage: StorageConfig = Field(default_factory=StorageConfig)
+    # Batch 13: alias expansion for query rewriter
+    query_rewrite_aliases: dict[str, list[str]] = Field(default_factory=dict)
 
 
 class ToolRule(BaseModel):

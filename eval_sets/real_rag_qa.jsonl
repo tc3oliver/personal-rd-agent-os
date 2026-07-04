@@ -1,0 +1,63 @@
+{"id":"real-rag-001","question":"GraphRAG 和 VectorRAG 的差異是什麼？","expected_topics":["知識與檢索"],"expected_keywords":["GraphRAG","VectorRAG"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-002","question":"GraphRAG 的真相：VectorRAG 加上層次化摘要就夠了","expected_topics":["知識與檢索"],"expected_keywords":["GraphRAG","層次化","摘要"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-003","question":"AgentTrace 多智能體因果圖追蹤","expected_topics":["AI代理系統"],"expected_keywords":["AgentTrace","因果圖","追蹤"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-004","question":"LLM agent 的 flight recorder 設計","expected_topics":["AI代理系統"],"expected_keywords":["flight recorder","agent","Litmus"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-005","question":"Argus-LLM G-ARVIS 六維度輸出評估框架","expected_topics":["LLM推理與評估"],"expected_keywords":["Argus","G-ARVIS","評估","六維度"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-006","question":"RAG 系統的幻覺消除方法","expected_topics":["知識與檢索","LLM推理與評估"],"expected_keywords":["幻覺","RAG","hallucination"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-007","question":"Context Engineering LLM 記憶與檢索架構","expected_topics":["知識與檢索"],"expected_keywords":["Context Engineering","記憶","檢索"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-008","question":"Domain-Grounded Tiered Retrieval 無需微調","expected_topics":["知識與檢索"],"expected_keywords":["Tiered Retrieval","Domain","微調"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-009","question":"Bits over Random RAG 檢索評估新範式","expected_topics":["知識與檢索"],"expected_keywords":["Bits over Random","BoR","檢索評估"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-010","question":"Memory-Keyed Attention MKA 分層式長上下文注意力","expected_topics":["知識與檢索"],"expected_keywords":["MKA","Memory-Keyed","Attention","長上下文"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-011","question":"KG-Hopper 知識圖譜強化學習 LLM 推理","expected_topics":["知識與檢索"],"expected_keywords":["KG-Hopper","知識圖譜","強化學習"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-012","question":"Mnemosyne 程式碼語意檢索 vs Grep","expected_topics":["知識與檢索"],"expected_keywords":["Mnemosyne","語意檢索","Grep","程式碼"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-013","question":"Proxy-Pointer RAG 檢索技術","expected_topics":["知識與檢索"],"expected_keywords":["Proxy-Pointer","RAG","檢索"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-014","question":"LLM 持久化記憶系統與生命週期管理","expected_topics":["知識與檢索"],"expected_keywords":["記憶","生命週期","persistence"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-015","question":"Three LLM Agents Knowledge Garden 多代理知識管理","expected_topics":["知識與檢索","AI代理系統"],"expected_keywords":["Knowledge Garden","多代理","知識"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-016","question":"ACP Agent Control Protocol 準入控制","expected_topics":["AI代理系統"],"expected_keywords":["ACP","Agent Control","Protocol","準入"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-017","question":"AgentDrift 工具損壞導致 agent 安全漂移","expected_topics":["AI代理系統","AI安全"],"expected_keywords":["AgentDrift","工具","漂移","安全"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-018","question":"Semantic AST Logic Graphs 減少 LLM Agent Loop","expected_topics":["AI代理系統"],"expected_keywords":["Semantic AST","Logic Graphs","Agent Loop"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-019","question":"AI Swarm 多 Agent 協作群體智能","expected_topics":["AI代理系統"],"expected_keywords":["Swarms","多 Agent","群體"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-020","question":"Environment Maps long-horizon agent 結構化環境","expected_topics":["AI代理系統"],"expected_keywords":["Environment Maps","long-horizon","agent"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-021","question":"CoT 思考鏈忠實度測量分類器敏感性","expected_topics":["LLM推理與評估"],"expected_keywords":["CoT","忠實度","chain-of-thought","分類器"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-022","question":"PRISM Expert Personas 條件式路由方案","expected_topics":["LLM推理與評估"],"expected_keywords":["PRISM","Expert","Personas","路由"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-023","question":"RLVR LLM 推理能力訓練","expected_topics":["LLM推理與評估"],"expected_keywords":["RLVR","推理","訓練","RL"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-024","question":"reThink 認知數學框架 根除 LLM 幻覺","expected_topics":["LLM推理與評估"],"expected_keywords":["reThink","認知","幻覺","數學"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-025","question":"LLM 說服力基準測試 多輪對話","expected_topics":["LLM推理與評估"],"expected_keywords":["說服力","基準","多輪對話","persuasion"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-026","question":"RAG 系統衝突檢測技術","expected_topics":["知識與檢索","LLM推理與評估"],"expected_keywords":["衝突","conflict","RAG"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-027","question":"CoVerRL 無標籤推理共識陷阱","expected_topics":["LLM推理與評估"],"expected_keywords":["CoVerRL","共識","無標籤","推理"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-028","question":"LLM Neuroanatomy 現代 LLM 駭客技術","expected_topics":["LLM推理與評估"],"expected_keywords":["Neuroanatomy","駭客","LLM"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-029","question":"prompt injection 防禦與偵測","expected_topics":["AI安全"],"expected_keywords":["prompt injection","防禦","偵測"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-030","question":"WASM 沙箱 AI 程式碼執行 ClamBot","expected_topics":["AI安全","AI代理系統"],"expected_keywords":["WASM","沙箱","ClamBot"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-031","question":"AgentDesk MCP adversarial review","expected_topics":["AI安全","AI代理系統"],"expected_keywords":["AgentDesk","MCP","adversarial"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-032","question":"供應鏈攻擊與開源軟體 LLM 汙染","expected_topics":["AI安全","開發者工具與框架"],"expected_keywords":["供應鏈","LLM-Tainted","開源"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-033","question":"零預算全端開發免費 LLM 生產級應用","expected_topics":["開發者工具與框架"],"expected_keywords":["零預算","免費","全端"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-034","question":"Datasette LLM 生態系 API key 多模型調度","expected_topics":["開發者工具與框架"],"expected_keywords":["Datasette","LLM","API key"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-035","question":"OpenCode-LLM-proxy 多協議轉譯","expected_topics":["開發者工具與框架"],"expected_keywords":["OpenCode","proxy","協議"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-036","question":"LLM 工具調用性能評估","expected_topics":["開發者工具與框架","LLM推理與評估"],"expected_keywords":["工具調用","性能","tool calling"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-037","question":"prompt testing framework","expected_topics":["開發者工具與框架"],"expected_keywords":["prompt","testing","framework"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-038","question":"AutoResearch Karpathy 自主研究迴圈","expected_topics":["開發者工具與框架","AI代理系統"],"expected_keywords":["AutoResearch","Karpathy","自主"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-039","question":"Askable UI 屬性 LLM 上下文","expected_topics":["開發者工具與框架"],"expected_keywords":["Askable","UI","屬性"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-040","question":"SWE Context Bench 程式上下文學習基準","expected_topics":["開發者工具與框架","LLM推理與評估"],"expected_keywords":["SWE","Context","Bench"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-041","question":"GraphRAG VectorRAG 層次化摘要","expected_topics":["知識與檢索"],"expected_keywords":["GraphRAG","VectorRAG","層次化"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-042","question":"有效 privacy routing 的設計","expected_topics":["知識與檢索","AI安全"],"expected_keywords":["privacy","routing","model"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-043","question":"hybrid retrieval metadata filtering","expected_topics":["知識與檢索"],"expected_keywords":["hybrid","retrieval","metadata","filter"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-044","question":"structured output validation pydantic retry","expected_topics":["知識與檢索","開發者工具與框架"],"expected_keywords":["structured","output","pydantic","validation"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-045","question":"LLM Wiki 檔案系統隔離架構","expected_topics":["知識與檢索"],"expected_keywords":["Wiki","檔案","隔離"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-046","question":"RAG retrieval 評估 Recall@K MRR","expected_topics":["知識與檢索","LLM推理與評估"],"expected_keywords":["Recall","MRR","retrieval","eval"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-047","question":"reciprocal rank fusion hybrid search","expected_topics":["知識與檢索"],"expected_keywords":["RRF","rank","fusion","hybrid"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-048","question":"embedding 維度 bge-m3 1024","expected_topics":["知識與檢索"],"expected_keywords":["embedding","bge-m3","1024"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-049","question":"citation grounding hallucinated chunk_id 驗證","expected_topics":["知識與檢索","LLM推理與評估"],"expected_keywords":["citation","hallucinated","chunk_id"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-050","question":"LangGraph StateGraph checkpoint resume","expected_topics":["AI代理系統","開發者工具與框架"],"expected_keywords":["LangGraph","StateGraph","checkpoint"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-051","question":"HF transformers 推理速度優化","expected_topics":["LLM訓練與優化","AI硬體與基礎設施"],"expected_keywords":["transformers","推理","速度"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-052","question":"多模態 vision language model 評估","expected_topics":["多模態與視覺AI","LLM推理與評估"],"expected_keywords":["多模態","vision","VLM"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-053","question":"GPU inference server vLLM","expected_topics":["AI硬體與基礎設施"],"expected_keywords":["GPU","vLLM","inference"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-054","question":"fine-tuning LoRA QLoRA 參數高效","expected_topics":["LLM訓練與優化"],"expected_keywords":["LoRA","QLoRA","fine-tuning"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-055","question":"robotic foundation model 機器人","expected_topics":["自駕與機器人"],"expected_keywords":["robot","foundation","機器人"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-056","question":"autonomous driving FSD end-to-end","expected_topics":["自駕與機器人"],"expected_keywords":["autonomous","FSD","end-to-end"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-057","question":"AI 中國開源 Qwen DeepSeek","expected_topics":["中國AI生態"],"expected_keywords":["Qwen","DeepSeek","中國","開源"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-058","question":"AI 法規歐盟 AI Act compliance","expected_topics":["AI倫理與法規"],"expected_keywords":["AI Act","法規","compliance","歐盟"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-059","question":"Anthropic Claude Constitutional AI","expected_topics":["Anthropic","AI安全"],"expected_keywords":["Anthropic","Claude","Constitutional"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-060","question":"OpenAI GPT-4o reasoning multimodal","expected_topics":["OpenAI","多模態與視覺AI"],"expected_keywords":["GPT-4o","OpenAI","multimodal"],"expected_files":[],"answer_type":"synthesis"}
+{"id":"real-rag-061","question":"完全不存在的 XYZFakePaper2026 主題","expected_topics":[],"expected_keywords":["XYZFakePaper2026"],"expected_files":[],"answer_type":"no_answer"}
+{"id":"real-rag-062","question":"qqzzxx 完全虛構研究","expected_topics":[],"expected_keywords":["qqzzxx"],"expected_files":[],"answer_type":"no_answer"}
+{"id":"real-rag-063","question":"zzzz unknown topic not in corpus","expected_topics":[],"expected_keywords":["zzzz"],"expected_files":[],"answer_type":"no_answer"}

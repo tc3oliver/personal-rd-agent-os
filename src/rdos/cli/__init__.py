@@ -5,6 +5,7 @@ from __future__ import annotations
 import typer
 
 from rdos.cli.ask import app as ask_app
+from rdos.cli.benchmark import app as benchmark_app
 from rdos.cli.corpus import app as corpus_app
 from rdos.cli.doctor import app as doctor_app
 from rdos.cli.eval import app as eval_app
@@ -26,6 +27,7 @@ app.add_typer(ask_app, name="ask")
 app.add_typer(trace_app, name="trace")
 app.add_typer(eval_app, name="eval")
 app.add_typer(doctor_app, name="doctor")
+app.add_typer(benchmark_app, name="benchmark")
 
 
 @app.command()
@@ -40,13 +42,6 @@ def version() -> None:
 def hello() -> None:
     """Placeholder command to verify CLI wiring."""
     typer.echo("rdos skeleton ready")
-
-
-# Sub-apps will be registered by later batches:
-#   search  (Batch 4)
-#   ask     (Batch 7)
-#   trace   (Batch 8)
-#   eval    (Batch 9)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ from rdos.cli.doctor import app as doctor_app
 from rdos.cli.eval import app as eval_app
 from rdos.cli.index import app as index_app
 from rdos.cli.search import app as search_app
+from rdos.cli.tool import app as tool_app
 from rdos.cli.trace import app as trace_app
 
 app = typer.Typer(
@@ -28,6 +29,7 @@ app.add_typer(trace_app, name="trace")
 app.add_typer(eval_app, name="eval")
 app.add_typer(doctor_app, name="doctor")
 app.add_typer(benchmark_app, name="benchmark")
+app.add_typer(tool_app, name="tool")
 
 
 @app.command()

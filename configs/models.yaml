@@ -4,9 +4,9 @@
 profiles:
   local_fast:
     provider: local
-    base_url: ${LOCAL_LLM_BASE_URL}
-    model: ${LOCAL_LLM_MODEL}
-    api_key_env: LOCAL_LLM_API_KEY
+    base_url: ${RDOS_LOCAL_CHAT_BASE_URL}
+    model: ${RDOS_LOCAL_CHAT_MODEL}
+    api_key_env: RDOS_LOCAL_MODEL_API_KEY
     max_tokens: 4096
     temperature: 0.3
     allows_tools: false

@@ -54,7 +54,7 @@ def test_load_config_has_tool_policy(configs_dir: Path) -> None:
 
 
 def test_env_substitution(monkeypatch: pytest.MonkeyPatch, configs_dir: Path) -> None:
-    monkeypatch.setenv("LOCAL_LLM_BASE_URL", "http://test:9999")
+    monkeypatch.setenv("RDOS_LOCAL_CHAT_BASE_URL", "http://test:9999")
     cfg = load_config(configs_dir)
     assert cfg.models.profiles["local_fast"].base_url == "http://test:9999"
 

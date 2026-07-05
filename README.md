@@ -255,12 +255,12 @@ Trace records include:
 
 ## Local Model Stack
 
-RDOS v1.0 was validated with the following local model stack:
+RDOS v1.0 was validated with an OpenAI-compatible local model stack:
 
 | Purpose          | Endpoint                     | Model           |
 | ---------------- | ---------------------------- | --------------- |
-| Chat / reasoning | `http://10.10.10.12:8080/v1` | `qwythos-9b-q4` |
-| Embedding        | `http://10.10.10.12:8081/v1` | `bge-m3-q8_0`   |
+| Chat / reasoning | `http://localhost:8080/v1`   | `qwythos-9b-q4` |
+| Embedding        | `http://localhost:8081/v1`   | `bge-m3-q8_0`   |
 
 The local embedding model outputs 1024-dimensional vectors.
 
@@ -309,10 +309,10 @@ cp .env.example .env
 Example local model settings:
 
 ```env
-RDOS_LOCAL_CHAT_BASE_URL=http://10.10.10.12:8080/v1
+RDOS_LOCAL_CHAT_BASE_URL=http://localhost:8080/v1
 RDOS_LOCAL_CHAT_MODEL=qwythos-9b-q4
 
-RDOS_LOCAL_EMBEDDING_BASE_URL=http://10.10.10.12:8081/v1
+RDOS_LOCAL_EMBEDDING_BASE_URL=http://localhost:8081/v1
 RDOS_LOCAL_EMBEDDING_MODEL=bge-m3-q8_0
 RDOS_LOCAL_EMBEDDING_DIM=1024
 
@@ -342,21 +342,20 @@ embedding batch
 ### 1. Index sample notes
 
 ```bash
-uv run rdos index ./sample_data/notes --embedding-provider fake
+uv run rdos index --embedding-provider fake ./sample_data/notes
 ```
 
 ### 2. Search
 
 ```bash
-uv run rdos search "RAG filtering" --embedding-provider fake
+uv run rdos search --embedding-provider fake "RAG filtering"
 ```
 
 ### 3. Ask
 
 ```bash
-uv run rdos ask "RAG filtering 是什麼？" \
-  --embedding-provider fake \
-  --llm-mode stub
+uv run rdos ask --embedding-provider fake --llm-mode stub \
+  "RAG filtering 是什麼？"
 ```
 
 ### 4. Show trace
@@ -374,20 +373,23 @@ uv run rdos eval all
 
 ---
 
-## Real Corpus Usage
+## Corpus Usage
 
-RDOS can ingest a real personal research corpus such as:
+RDOS can ingest a configured Markdown research corpus. Corpus presets are local
+configuration: the repository ships sample data, while private note paths should
+remain outside git.
 
 ```text
-~/Workspace/notes/AI/clawd-research/
+~/path/to/private/research-notes/
 ```
 
 Example:
 
 ```bash
-uv run rdos index-corpus clawd-research \
+uv run rdos index-corpus \
+  --embedding-provider local-bge-m3 \
   --scope rag \
-  --embedding-provider local-bge-m3
+  <corpus-preset>
 ```
 
 Supported corpus scopes:
@@ -401,19 +403,18 @@ devtools  → 開發者工具與框架
 all       → all configured folders
 ```
 
-Search real corpus:
+Search a configured corpus:
 
 ```bash
-uv run rdos search "GraphRAG VectorRAG 層次化摘要" \
-  --embedding-provider local-bge-m3
+uv run rdos search --embedding-provider local-bge-m3 \
+  "GraphRAG VectorRAG 層次化摘要"
 ```
 
-Ask against real corpus:
+Ask against a configured corpus:
 
 ```bash
-uv run rdos ask "我有沒有整理過 AgentTrace？" \
-  --embedding-provider local-bge-m3 \
-  --llm-mode local
+uv run rdos ask --embedding-provider local-bge-m3 --llm-mode local \
+  "我有沒有整理過 AgentTrace？"
 ```
 
 ---
@@ -423,9 +424,8 @@ uv run rdos ask "我有沒有整理過 AgentTrace？" \
 ### Research Ask
 
 ```bash
-uv run rdos ask "我有沒有整理過 AgentTrace？" \
-  --embedding-provider local-bge-m3 \
-  --llm-mode local
+uv run rdos ask --embedding-provider local-bge-m3 --llm-mode local \
+  "我有沒有整理過 AgentTrace？"
 ```
 
 ### Digest
@@ -433,44 +433,40 @@ uv run rdos ask "我有沒有整理過 AgentTrace？" \
 ```bash
 uv run rdos research digest \
   --since 2026-07-01 \
-  --collection clawd-research \
-  --embedding-provider local-bge-m3 \
-  --llm-mode local
+  --collection <corpus-preset> \
+  --embedding-provider local-bge-m3
 ```
 
 ### Topic Explorer
 
 ```bash
-uv run rdos research topic "AgentTrace" \
-  --collection clawd-research \
+uv run rdos research topic \
+  --collection <corpus-preset> \
   --embedding-provider local-bge-m3 \
-  --llm-mode local
+  "AgentTrace"
 ```
 
 ### Synthesis
 
 ```bash
 uv run rdos research synthesize \
-  "整理我關於 AgentTrace 與 agent flight recorder 的筆記" \
-  --collection clawd-research \
+  --collection <corpus-preset> \
   --embedding-provider local-bge-m3 \
-  --llm-mode local
+  "整理我關於 AgentTrace 與 agent flight recorder 的筆記"
 ```
 
 ### Multi-turn Research Thread
 
 ```bash
-uv run rdos thread new "AgentTrace RDOS trace design"
+uv run rdos thread new --collection <corpus-preset>
 
-uv run rdos thread ask <thread_id> \
-  "我有沒有整理過 AgentTrace 或 agent flight recorder 相關資料？" \
-  --embedding-provider local-bge-m3 \
-  --llm-mode local
+uv run rdos thread ask --embedding-provider local-bge-m3 --llm-mode local \
+  <thread_id> \
+  "我有沒有整理過 AgentTrace 或 agent flight recorder 相關資料？"
 
-uv run rdos thread ask <thread_id> \
-  "這些資料對 RDOS 的 trace design 有什麼啟發？" \
-  --embedding-provider local-bge-m3 \
-  --llm-mode local
+uv run rdos thread ask --embedding-provider local-bge-m3 --llm-mode local \
+  <thread_id> \
+  "這些資料對 RDOS 的 trace design 有什麼啟發？"
 
 uv run rdos thread show <thread_id>
 uv run rdos thread close <thread_id>
@@ -727,14 +723,14 @@ personal-rd-agent-os/
 
 ---
 
-## What Is Real in v1.0
+## Validation Scope
 
-Implemented and validated:
+Implemented and validated in v1.0:
 
-* real local embedding with `bge-m3-q8_0`
-* real local LLM with `qwythos-9b-q4`
-* real corpus ingestion
-* selected real corpus benchmark
+* local embedding with `bge-m3-q8_0`
+* local LLM runtime with `qwythos-9b-q4`
+* configured corpus ingestion
+* selected corpus benchmark
 * LangGraph StateGraph runtime
 * thread ID and trace integration
 * runtime tool permission gate
@@ -836,9 +832,10 @@ v1.0.1
 
 ---
 
-## Portfolio Summary
+## Engineering Summary
 
-RDOS demonstrates practical AI engineering beyond a chatbot or RAG demo.
+RDOS is an engineering-focused local research runtime rather than a generic
+chatbot wrapper.
 
 Key engineering themes:
 
@@ -853,12 +850,6 @@ Key engineering themes:
 * adversarial testing
 * release discipline
 * feature freeze and maintenance policy
-
-Resume bullet:
-
-```text
-Built RDOS, a local-first, privacy-aware, model-agnostic personal R&D agent runtime using LangGraph, local bge-m3 embeddings, a local qwythos LLM, hybrid retrieval, citation validation, privacy/model routing, HITL approval, no-answer calibration, redaction guardrails, multi-turn research threads, JSONL tracing, and eval/benchmark release gates. The system indexes a real personal AI research corpus and supports research Q&A, digests, topic exploration, and synthesis workflows, validated with adversarial evals, real-runtime validation, traceability, and runtime tool permission boundaries.
-```
 
 ---
 

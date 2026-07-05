@@ -3,6 +3,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+echo "[demo] Resetting deterministic demo index..."
+rm -rf data/lancedb data/sqlite
+mkdir -p data/lancedb data/sqlite data/traces data/reports data/generated data/samples
+uv run rdos index --embedding-provider fake ./sample_data/notes
+echo
+
 echo "==> pytest"
 uv run pytest -q
 
@@ -15,16 +21,12 @@ echo "==> rdos --help (14 commands expected)"
 uv run rdos --help | head -25
 
 echo
-echo "==> rdos index ./sample_data/notes (fake provider, deterministic)"
-uv run rdos index ./sample_data/notes --embedding-provider fake
-
-echo
 echo "==> rdos search 'RAG filtering'"
-uv run rdos search "RAG filtering" --embedding-provider fake
+uv run rdos search --embedding-provider fake "RAG filtering"
 
 echo
 echo "==> rdos ask (stub LLM, no local model needed)"
-uv run rdos ask "RAG filtering 是什麼？" --llm-mode stub --embedding-provider fake
+uv run rdos ask --llm-mode stub --embedding-provider fake "RAG filtering 是什麼？"
 
 echo
 echo "==> rdos trace list"

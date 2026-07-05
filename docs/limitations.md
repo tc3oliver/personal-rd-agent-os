@@ -34,15 +34,16 @@ These work end-to-end and are exercised on the real clawd-research corpus.
 
 Architecture exists, but operationally incomplete.
 
-- **No-answer framework** — `no_answer_threshold` config exists, retriever sets `no_answer_triggered`, but **threshold defaults to `0.0` (disabled)** because RRF scores are ~0.01 and per-collection calibration is not done. Calibration + release gate tracked in [Batch 20](./batches/batch-20-no-answer-calibration.md).
-- **Tool approval flow** — `requires_approval` tools return `approval_required` decision correctly, but there is no `rdos approval approve` flow to resume the graph. Tracked in [Batch 19](./batches/batch-19-hitl-runtime.md).
-- **`private_summary` cloud escalation** — privacy router correctly identifies the level and requires confirmation, but the confirmation flow + redaction pipeline are missing. In practice every run falls back to local. Tracked in [Batch 21](./batches/batch-21-redaction-cloud.md).
-- **LangGraph checkpointer** — `InMemorySaver` works for single-session, but restart loses thread state. SQLite checkpointer lands in [Batch 19](./batches/batch-19-hitl-runtime.md).
-- **Trace redaction** — trace records contain raw `user_query` / `retrieved_chunks` / `final_answer`. **Audit-confirmed (P1-2):** `grep redact src/rdos/trace/` is empty; Batch 21 delivered recognizers but did NOT wire them to trace-before-write. Fix lands in Batch 18.5 (post-audit cleanup, this branch). Until then, treat `data/traces/runs.jsonl` as containing potentially sensitive content.
+- **No-answer framework** — `no_answer_threshold` lives in `configs/rag.yaml:24` (default `0.0` = disabled, explicit since Batch 23). Framework + calibrator + `NO_ANSWER_GATE` are wired (`rdos eval no-answer`). Enabling in production requires per-collection calibration against real RRF score distribution; deferred until v0.3.
+- **Tool approval flow** — `requires_approval` tools return `approval_required`; **HITL resume is implemented** via `rdos approval list/show/approve/deny` (Batch 19). `export_report` writes the file only after explicit approval; replay protection via idempotency_key.
+- **`private_summary` cloud escalation** — privacy router correctly identifies the level and requires confirmation; HITL approval queue handles the confirmation. **Cloud adapter is intentionally NOT shipped** in v0.2 — local-first is the design constraint. `cloud_send()` shim (`src/rdos/llm/cloud_send.py`) + `validate_prompt()` last-line-of-defense are ready and tested; the actual cloud HTTP call lands in a future batch only if a use case requires it.
+- **LangGraph checkpointer** — `InMemorySaver` is the default for `build_langgraph_runtime`; `SqliteSaver` factory exists at `src/rdos/graph/checkpointer.py` and is exercised by `export_graph` and Batch 19 tests. Multi-turn thread store uses SQLite (`data/threads.db`) so thread state survives CLI restarts even when LangGraph in-memory state is lost.
+- **Trace redaction** — **implemented (Batch 18.5)**. `JsonlTraceStore(redact=True)` is the default; user_query / final_answer / citation quote are run through `configs/redaction.yaml` recognizers before disk write. Set `redact=False` for debug-only runs.
 - **Indexing speed** — `content_hash` check still reads every unchanged file. Fine at 2k files; would be slow at 100k. mtime-based fast path is future work.
 - **Embedding cache** — when a file changes, all its chunks re-embed. chunk_hash-keyed cache would cut API calls.
 - **Stale marker is informational** — stale documents stay searchable; only filtered from `list_recent_notes` and timeline queries. No "purge stale" command.
 - **Citation coverage matcher** — synthesis uses 4-char overlap heuristic to attach claims to citations. A semantic matcher would catch more.
+- **Multi-turn carry-forward** — Batch 22 stores cited chunk_ids per thread; Batch 23 (P1-1) wires `context_for_new_turn` into the retrieval query so the keyword channel sees prior topic tokens. Stale citations are NOT auto-purged from the carry-forward; `CitationValidator` still gates every claim at answer time.
 
 ## Planned (v0.2 Trust Runtime)
 

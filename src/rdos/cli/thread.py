@@ -72,6 +72,38 @@ def ask_cmd(
     if rewritten != question:
         console.print(f"[dim]rewrite:[/dim] {question} → {rewritten}")
 
+    # P1-1 (Batch 23 audit fix): compose threaded retrieval query that
+    # actually carries forward prior context. context_for_new_turn returns
+    # prior turns / cited chunk_ids / compressed summary. We prepend a
+    # prior-context block so the keyword channel of HybridRetriever can
+    # pick up topics from earlier turns.
+    from rdos.threads.rewriter import context_for_new_turn
+
+    ctx_payload = context_for_new_turn(state, max_turns=3)
+    ctx_topics = []
+    for t in ctx_payload.get("prior_turns", []):
+        for tok in __import__("re").findall(r"[A-Za-z][A-Za-z0-9_-]{2,}", t.get("question", "")):
+            if tok.lower() not in {"the", "and", "for", "with", "what", "why", "how"}:
+                ctx_topics.append(tok)
+    ctx_cited = ctx_payload.get("cited_chunk_ids", [])[:5]
+    ctx_block_parts: list[str] = []
+    if ctx_topics:
+        unique_topics: list[str] = []
+        seen: set[str] = set()
+        for t in ctx_topics:
+            if t not in seen:
+                unique_topics.append(t)
+                seen.add(t)
+        ctx_block_parts.append("prior topics: " + ", ".join(unique_topics[:6]))
+    if ctx_cited:
+        ctx_block_parts.append("prior cited: " + " ".join(ctx_cited))
+    if ctx_block_parts:
+        composed_query = rewritten + " | " + " ; ".join(ctx_block_parts)
+    else:
+        composed_query = rewritten
+    if composed_query != rewritten:
+        console.print(f"[dim]carry-forward:[/dim] {len(ctx_topics)} topic tokens, {len(ctx_cited)} cited ids")
+
     provider_name = embedding_provider or cfg.models.embedding.provider
     dim = cfg.models.embedding.dim or cfg.rag.embedding.dim
     sqlite_store = SqliteMetadataStore(cfg.rag.storage.sqlite_path)
@@ -90,7 +122,7 @@ def ask_cmd(
         llm=llm_decision.adapter,
     )
     timer = Timer()
-    graph_state, langgraph_thread_id = runtime.invoke(rewritten)
+    graph_state, langgraph_thread_id = runtime.invoke(composed_query)
     answer_obj = graph_state.get("final_answer")
     answer_text = answer_obj.answer if answer_obj else ""
     citations = graph_state.get("citations") or []
@@ -114,7 +146,13 @@ def ask_cmd(
     graph_state["runtime_meta"]["graph_runtime"] = "langgraph"
     graph_state["runtime_meta"]["thread_id"] = state.thread_id
     graph_state["runtime_meta"]["turn_index"] = len(state.turns) - 1
+    graph_state["runtime_meta"]["original_followup_query"] = question
     graph_state["runtime_meta"]["rewritten_query"] = rewritten
+    graph_state["runtime_meta"]["composed_retrieval_query"] = composed_query
+    graph_state["runtime_meta"]["context_for_new_turn_used"] = {
+        "prior_topic_tokens": len(ctx_topics),
+        "prior_cited_carried": len(ctx_cited),
+    }
     graph_state["runtime_meta"]["original_query"] = question
     trace_store = JsonlTraceStore("data/traces/runs.jsonl")
     record = build_record_from_state(

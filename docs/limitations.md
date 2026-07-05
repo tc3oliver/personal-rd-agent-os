@@ -38,7 +38,7 @@ Architecture exists, but operationally incomplete.
 - **Tool approval flow** — `requires_approval` tools return `approval_required` decision correctly, but there is no `rdos approval approve` flow to resume the graph. Tracked in [Batch 19](./batches/batch-19-hitl-runtime.md).
 - **`private_summary` cloud escalation** — privacy router correctly identifies the level and requires confirmation, but the confirmation flow + redaction pipeline are missing. In practice every run falls back to local. Tracked in [Batch 21](./batches/batch-21-redaction-cloud.md).
 - **LangGraph checkpointer** — `InMemorySaver` works for single-session, but restart loses thread state. SQLite checkpointer lands in [Batch 19](./batches/batch-19-hitl-runtime.md).
-- **Trace redaction** — trace records contain raw `user_query` / `retrieved_chunks` / `final_answer`. Redaction-before-write lands in [Batch 21](./batches/batch-21-redaction-cloud.md).
+- **Trace redaction** — trace records contain raw `user_query` / `retrieved_chunks` / `final_answer`. **Audit-confirmed (P1-2):** `grep redact src/rdos/trace/` is empty; Batch 21 delivered recognizers but did NOT wire them to trace-before-write. Fix lands in Batch 18.5 (post-audit cleanup, this branch). Until then, treat `data/traces/runs.jsonl` as containing potentially sensitive content.
 - **Indexing speed** — `content_hash` check still reads every unchanged file. Fine at 2k files; would be slow at 100k. mtime-based fast path is future work.
 - **Embedding cache** — when a file changes, all its chunks re-embed. chunk_hash-keyed cache would cut API calls.
 - **Stale marker is informational** — stale documents stay searchable; only filtered from `list_recent_notes` and timeline queries. No "purge stale" command.

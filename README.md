@@ -142,7 +142,7 @@ src/rdos/
 eval_sets/      Eval fixtures (rag, citation, model routing, privacy, real_rag_qa, adversarial)
 sample_data/    Synthetic markdown notes (5 files)
 data/           Runtime data (lancedb, sqlite, traces, reports, generated) — gitignored contents
-tests/          Unit + integration tests (148 passing)
+tests/          Unit + integration tests (197 passing)
 scripts/        check_local_llm.sh, check_langchain_llama_cpp.py, demo_*.sh
 ```
 
@@ -190,10 +190,18 @@ Honest scope of v0.1.0 — see [docs/limitations.md](docs/limitations.md) for th
 | Phase 3 — Trust Runtime v0.2 | Batch 19–22 | planned |
 
 ```
-Total tests: 148 passing
+Total tests: 197 passing
 Foundation regression gate: PASS
 Real corpus benchmark: recall@5 = 0.73 (3 of 25 scopes)
 ```
+
+> Reproduce the real corpus benchmark:
+> ```bash
+> uv run rdos index-corpus --scope rag   --embedding-provider local-bge-m3 clawd-research
+> uv run rdos index-corpus --scope agent --embedding-provider local-bge-m3 clawd-research
+> uv run rdos index-corpus --scope eval  --embedding-provider local-bge-m3 clawd-research
+> uv run rdos benchmark retrieval --embedding-provider local-bge-m3
+> ```
 
 ## License
 

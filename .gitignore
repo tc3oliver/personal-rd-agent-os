@@ -26,6 +26,11 @@ htmlcov/
 .env.local
 .env.*.local
 
+# Audit fix (Batch 18): runtime SQLite for approvals must not be tracked
+data/approvals.db
+data/checkpoints.db
+data/threads.db
+
 .DS_Store
 .idea/
 .vscode/

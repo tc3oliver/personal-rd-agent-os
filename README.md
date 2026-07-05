@@ -375,9 +375,9 @@ uv run rdos eval all
 
 ## Corpus Usage
 
-RDOS can ingest a configured Markdown research corpus. Corpus presets are local
-configuration: the repository ships sample data, while private note paths should
-remain outside git.
+RDOS can ingest a configured Markdown research corpus. The public default preset
+is `research-notes`; private note paths should remain outside git and can be set
+with `RDOS_CORPUS_RESEARCH_NOTES_ROOT`.
 
 ```text
 ~/path/to/private/research-notes/
@@ -389,7 +389,7 @@ Example:
 uv run rdos index-corpus \
   --embedding-provider local-bge-m3 \
   --scope rag \
-  <corpus-preset>
+  research-notes
 ```
 
 Supported corpus scopes:
@@ -433,7 +433,7 @@ uv run rdos ask --embedding-provider local-bge-m3 --llm-mode local \
 ```bash
 uv run rdos research digest \
   --since 2026-07-01 \
-  --collection <corpus-preset> \
+  --collection research-notes \
   --embedding-provider local-bge-m3
 ```
 
@@ -441,7 +441,7 @@ uv run rdos research digest \
 
 ```bash
 uv run rdos research topic \
-  --collection <corpus-preset> \
+  --collection research-notes \
   --embedding-provider local-bge-m3 \
   "AgentTrace"
 ```
@@ -450,7 +450,7 @@ uv run rdos research topic \
 
 ```bash
 uv run rdos research synthesize \
-  --collection <corpus-preset> \
+  --collection research-notes \
   --embedding-provider local-bge-m3 \
   "整理我關於 AgentTrace 與 agent flight recorder 的筆記"
 ```
@@ -458,7 +458,7 @@ uv run rdos research synthesize \
 ### Multi-turn Research Thread
 
 ```bash
-uv run rdos thread new --collection <corpus-preset>
+uv run rdos thread new --collection research-notes
 
 uv run rdos thread ask --embedding-provider local-bge-m3 --llm-mode local \
   <thread_id> \

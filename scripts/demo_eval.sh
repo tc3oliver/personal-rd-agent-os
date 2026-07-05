@@ -4,6 +4,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+echo "[demo] Resetting deterministic demo index..."
+rm -rf data/lancedb data/sqlite
+mkdir -p data/lancedb data/sqlite data/traces data/reports data/generated data/samples
+uv run rdos index --embedding-provider fake ./sample_data/notes
+echo
+
 echo "==> rdos eval all (sample_data + fake provider)"
 uv run rdos eval all
 
@@ -13,11 +19,7 @@ uv run rdos benchmark retrieval --embedding-provider fake --eval-set eval_sets/r
 
 echo
 echo "==> rdos benchmark all (real provider — needs local model stack + real corpus)"
-if uv run rdos doctor models >/dev/null 2>&1; then
-  uv run rdos benchmark all --embedding-provider local-bge-m3 || echo "  (skipped: provider mismatch with current index)"
-else
-  echo "  (skipped: local model stack not reachable)"
-fi
+echo "  (skipped: deterministic demo index uses fake embeddings)"
 
 echo
 echo "Eval demo complete."

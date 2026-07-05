@@ -28,7 +28,7 @@ console = Console()
 
 @app.command("new")
 def new_cmd(
-    collection: str = typer.Option("clawd-research", "--collection"),
+    collection: str = typer.Option("research-notes", "--collection"),
     privacy: str = typer.Option("private_raw", "--privacy"),
 ) -> None:
     store = ThreadStore("data/threads.db")

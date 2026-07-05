@@ -16,7 +16,7 @@ import sys
 from dataclasses import dataclass
 from typing import Any
 
-DEFAULT_BASE_URL = os.environ.get("LOCAL_LLM_BASE_URL", "http://10.10.10.12:8080")
+DEFAULT_BASE_URL = os.environ.get("LOCAL_LLM_BASE_URL", "http://localhost:8080")
 DEFAULT_MODEL = os.environ.get("LOCAL_LLM_MODEL", "qwythos-9b-q4")
 DEFAULT_API_KEY = os.environ.get("LOCAL_LLM_API_KEY", "local-dev-key")
 

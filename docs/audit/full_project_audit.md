@@ -35,7 +35,7 @@
 | Head commit | `86a617a feat(batch-18.5): close audit P1-1 through P1-4` |
 | Tags | `v0.1.0-foundation`, `v0.2.0-trust-runtime` |
 | Python / uv | Python 3.11.8 / uv 0.9.18 |
-| Local model availability | **REACHABLE** — `rdos doctor models` 5/5 PASS at `10.10.10.12:8080/8081` |
+| Local model availability | **REACHABLE** — `rdos doctor models` 5/5 PASS at `localhost:8080/8081` |
 | Real corpus availability | Present at `~/Workspace/notes/AI/clawd-research`; tests use `tmp_path` (no real-corpus dependency in test suite) |
 
 ---

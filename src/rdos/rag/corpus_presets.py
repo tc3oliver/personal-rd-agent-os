@@ -12,27 +12,32 @@ class CorpusPreset:
     folders: tuple[str, ...]
 
 
+_RESEARCH_NOTE_SCOPES = {
+    "rag": CorpusPreset(
+        "rag", "知識與檢索", ("知識與檢索",)
+    ),
+    "agent": CorpusPreset(
+        "agent", "AI代理系統", ("AI代理系統",)
+    ),
+    "eval": CorpusPreset(
+        "eval", "LLM推理與評估", ("LLM推理與評估",)
+    ),
+    "security": CorpusPreset(
+        "security", "AI安全", ("AI安全",)
+    ),
+    "devtools": CorpusPreset(
+        "devtools", "開發者工具與框架", ("開發者工具與框架",)
+    ),
+    "all": CorpusPreset(
+        "all", "全部主題", ()
+    ),
+}
+
+
 CORPUS_PRESETS: dict[str, dict[str, CorpusPreset]] = {
-    "clawd-research": {
-        "rag": CorpusPreset(
-            "rag", "知識與檢索", ("知識與檢索",)
-        ),
-        "agent": CorpusPreset(
-            "agent", "AI代理系統", ("AI代理系統",)
-        ),
-        "eval": CorpusPreset(
-            "eval", "LLM推理與評估", ("LLM推理與評估",)
-        ),
-        "security": CorpusPreset(
-            "security", "AI安全", ("AI安全",)
-        ),
-        "devtools": CorpusPreset(
-            "devtools", "開發者工具與框架", ("開發者工具與框架",)
-        ),
-        "all": CorpusPreset(
-            "all", "全部主題", ()
-        ),
-    }
+    "research-notes": _RESEARCH_NOTE_SCOPES,
+    # Backward-compatible alias for the original private validation corpus.
+    "clawd-research": _RESEARCH_NOTE_SCOPES,
 }
 
 
@@ -54,7 +59,7 @@ def resolve_corpus_root(corpus: str) -> str:
     """Map corpus name → filesystem root.
 
     Overridable via env var RDOS_CORPUS_<NAME>_ROOT so users don't have to
-    pass the path every time. Defaults to a sensible workspace layout.
+    pass the path every time. Defaults avoid private machine-specific paths.
     """
     import os
 
@@ -64,7 +69,8 @@ def resolve_corpus_root(corpus: str) -> str:
         return override
     home = os.path.expanduser("~")
     defaults = {
-        "clawd-research": f"{home}/Workspace/notes/AI/clawd-research",
+        "research-notes": f"{home}/research-notes",
+        "clawd-research": f"{home}/research-notes",
     }
     if corpus not in defaults:
         raise ValueError(f"unknown corpus: {corpus!r}")

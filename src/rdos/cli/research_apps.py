@@ -19,7 +19,7 @@ console = Console()
 @app.command("digest")
 def digest_cmd(
     since: str = typer.Option(..., "--since", help="YYYY-MM-DD"),
-    collection: str = typer.Option("clawd-research", "--collection"),
+    collection: str = typer.Option("research-notes", "--collection"),
     embedding_provider: str = typer.Option(
         None, "--embedding-provider", help="fake | local-bge-m3"
     ),
@@ -46,7 +46,7 @@ def digest_cmd(
 @app.command("topic")
 def topic_cmd(
     topic: str = typer.Argument(..., help="Topic to explore"),
-    collection: str = typer.Option("clawd-research", "--collection"),
+    collection: str = typer.Option("research-notes", "--collection"),
     since: str | None = typer.Option(None, "--since"),
     embedding_provider: str = typer.Option(
         None, "--embedding-provider", help="fake | local-bge-m3"
@@ -75,7 +75,7 @@ def topic_cmd(
 @app.command("synthesize")
 def synthesize_cmd(
     question: str = typer.Argument(..., help="Synthesis question"),
-    collection: str = typer.Option("clawd-research", "--collection"),
+    collection: str = typer.Option("research-notes", "--collection"),
     embedding_provider: str = typer.Option(
         None, "--embedding-provider", help="fake | local-bge-m3"
     ),

@@ -8,16 +8,18 @@ echo "==> doctor models"
 uv run rdos doctor models
 
 echo
-echo "==> index-corpus clawd-research --scope rag"
-uv run rdos index-corpus --scope rag --embedding-provider local-bge-m3 clawd-research
+CORPUS="${RDOS_DEMO_CORPUS:-research-notes}"
+
+echo "==> index-corpus $CORPUS --scope rag"
+uv run rdos index-corpus --scope rag --embedding-provider local-bge-m3 "$CORPUS"
 
 echo
-echo "==> index-corpus clawd-research --scope agent"
-uv run rdos index-corpus --scope agent --embedding-provider local-bge-m3 clawd-research
+echo "==> index-corpus $CORPUS --scope agent"
+uv run rdos index-corpus --scope agent --embedding-provider local-bge-m3 "$CORPUS"
 
 echo
-echo "==> index-corpus clawd-research --scope eval"
-uv run rdos index-corpus --scope eval --embedding-provider local-bge-m3 clawd-research
+echo "==> index-corpus $CORPUS --scope eval"
+uv run rdos index-corpus --scope eval --embedding-provider local-bge-m3 "$CORPUS"
 
 echo
 echo "==> search 'GraphRAG VectorRAG 層次化摘要'"

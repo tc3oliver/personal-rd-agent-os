@@ -20,7 +20,8 @@ retrieval:
   rerank_top_k: 8          # post-RRF top-K passed to caller
   min_score_threshold: 0.02
   # Batch 23 audit P1-4: no-answer threshold is explicit and disabled by
-  # default. RRF scores in v1.0 hover around 0.005–0.015 on the clawd-research
+  # default. RRF scores in v1.0 hover around 0.005-0.015 on the validation
+  # corpus.
   # corpus. Set to a calibrated value (e.g. 0.008) only after running
   # `rdos eval no-answer` against the target corpus.
   no_answer_threshold: 0.0  # 0.0 = disabled; calibrate before enabling

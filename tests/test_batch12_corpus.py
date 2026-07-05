@@ -210,25 +210,30 @@ def test_topic_distribution_in_stats(synthetic_corpus: Path, tmp_path: Path) -> 
 
 
 def test_preset_known_scopes() -> None:
-    scopes = CORPUS_PRESETS["clawd-research"]
+    scopes = CORPUS_PRESETS["research-notes"]
     assert set(scopes) >= {"rag", "agent", "eval", "security", "devtools", "all"}
 
 
 def test_preset_rag_folder() -> None:
+    preset = get_preset("research-notes", "rag")
+    assert preset.folders == ("知識與檢索",)
+
+
+def test_legacy_clawd_research_preset_alias_still_supported() -> None:
     preset = get_preset("clawd-research", "rag")
     assert preset.folders == ("知識與檢索",)
 
 
 def test_preset_unknown_scope_raises() -> None:
     with pytest.raises(ValueError):
-        get_preset("clawd-research", "bogus")
+        get_preset("research-notes", "bogus")
 
 
 def test_resolve_corpus_root_env_override(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    monkeypatch.setenv("RDOS_CORPUS_CLAWD_RESEARCH_ROOT", str(tmp_path))
-    assert resolve_corpus_root("clawd-research") == str(tmp_path)
+    monkeypatch.setenv("RDOS_CORPUS_RESEARCH_NOTES_ROOT", str(tmp_path))
+    assert resolve_corpus_root("research-notes") == str(tmp_path)
 
 
 def test_resolve_corpus_root_unknown_raises() -> None:

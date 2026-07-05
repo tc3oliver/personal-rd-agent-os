@@ -4,13 +4,13 @@ Honest scope of v0.1.0-foundation. Categorized as **implemented**, **partially i
 
 ## Implemented
 
-These work end-to-end and are exercised on the real clawd-research corpus.
+These work end-to-end and are exercised on a configured research corpus.
 
 - **Local-first runtime** — uv + pyproject, no Docker, no server. SQLite + LanceDB embedded.
 - **Markdown parser** — frontmatter, title (H1 → filename), date (YYMMDD prefix), tags, `privacy_level` (default `private_raw`).
 - **Heading-aware chunker** — 300–600 token budget, `chunk_hash` dedup, `chunk_id` deterministic.
 - **Idempotent indexer** — `content_hash` short-circuits unchanged files; missing files marked `stale=1`.
-- **Corpus presets** — `rdos index-corpus clawd-research --scope rag|agent|eval|security|devtools|all`.
+- **Corpus presets** — `rdos index-corpus research-notes --scope rag|agent|eval|security|devtools|all`.
 - **Hybrid retriever** — semantic (LanceDB cosine) + keyword (SQLite FTS) via RRF; metadata filters (privacy / tags / folder / date).
 - **Query rewriter** — ASCII technical-term preservation + CJK n-grams + alias expansion (`configs/rag.yaml`).
 - **Citation three-way validation** — `chunk_exists ∧ hash_matches ∧ in_retrieved_context`.

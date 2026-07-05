@@ -9,7 +9,7 @@
 可用本地模型服務：
 
 **Chat**
-- base_url: `http://10.10.10.12:8080/v1`
+- base_url: `http://localhost:8080/v1`
 - model: `qwythos-9b-q4`
 - auth: `Bearer local-dev-key`
 - OpenAI-compatible chat completions
@@ -17,7 +17,7 @@
 - 可用 `chat_template_kwargs.enable_thinking=false` 關思考鏈
 
 **Embedding**
-- base_url: `http://10.10.10.12:8081/v1`
+- base_url: `http://localhost:8081/v1`
 - model: `bge-m3-q8_0`
 - auth: `Bearer local-dev-key`
 - OpenAI-compatible embeddings

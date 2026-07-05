@@ -4,9 +4,9 @@ Exits 0 on full pass, 1 on any failure. Used by `rdos doctor models` and as
 a standalone script for ops.
 
 Env vars (with defaults):
-    RDOS_LOCAL_CHAT_BASE_URL      http://10.10.10.12:8080
+    RDOS_LOCAL_CHAT_BASE_URL      http://localhost:8080
     RDOS_LOCAL_CHAT_MODEL         qwythos-9b-q4
-    RDOS_LOCAL_EMBEDDING_BASE_URL http://10.10.10.12:8081
+    RDOS_LOCAL_EMBEDDING_BASE_URL http://localhost:8081
     RDOS_LOCAL_EMBEDDING_MODEL    bge-m3-q8_0
     RDOS_LOCAL_MODEL_API_KEY      local-dev-key
     RDOS_LOCAL_EMBEDDING_DIM      1024
@@ -120,9 +120,9 @@ def check_embedding_batch(base_url: str, model: str, api_key: str) -> Check:
 
 
 def run_all() -> int:
-    chat_base = _env("RDOS_LOCAL_CHAT_BASE_URL", "http://10.10.10.12:8080")
+    chat_base = _env("RDOS_LOCAL_CHAT_BASE_URL", "http://localhost:8080")
     chat_model = _env("RDOS_LOCAL_CHAT_MODEL", "qwythos-9b-q4")
-    embed_base = _env("RDOS_LOCAL_EMBEDDING_BASE_URL", "http://10.10.10.12:8081")
+    embed_base = _env("RDOS_LOCAL_EMBEDDING_BASE_URL", "http://localhost:8081")
     embed_model = _env("RDOS_LOCAL_EMBEDDING_MODEL", "bge-m3-q8_0")
     api_key = _env("RDOS_LOCAL_MODEL_API_KEY", "local-dev-key")
     embed_dim = int(os.environ.get("RDOS_LOCAL_EMBEDDING_DIM", "1024"))

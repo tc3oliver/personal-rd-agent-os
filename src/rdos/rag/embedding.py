@@ -202,7 +202,7 @@ def build_embedding_provider(
         cfg = OpenAICompatibleEmbeddingConfig(
             name="local-bge-m3",
             base_url=base_url or os.environ.get(
-                "RDOS_LOCAL_EMBEDDING_BASE_URL", "http://10.10.10.12:8081/v1"
+                "RDOS_LOCAL_EMBEDDING_BASE_URL", "http://localhost:8081/v1"
             ),
             model=model or os.environ.get("RDOS_LOCAL_EMBEDDING_MODEL", "bge-m3-q8_0"),
             dim=int(os.environ.get("RDOS_LOCAL_EMBEDDING_DIM", dim)),

@@ -20,7 +20,7 @@ console = Console()
 
 @app.callback(invoke_without_command=True)
 def index_corpus_cmd(
-    corpus: str = typer.Argument(..., help="Corpus name (e.g. clawd-research)"),
+    corpus: str = typer.Argument(..., help="Corpus name (e.g. research-notes)"),
     scope: str = typer.Option("all", "--scope", help="Preset scope"),
     embedding_provider: str = typer.Option(
         None, "--embedding-provider", help="fake | local-bge-m3"

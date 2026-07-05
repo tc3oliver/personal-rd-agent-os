@@ -96,7 +96,7 @@ def run_digest(
 
         citations = CitationBuilder(max_citations=3).build(top_topic, result)
 
-    privacy = "private_raw" if not source_collection or source_collection == "clawd-research" else "public"
+    privacy = "private_raw"
     out = _build_digest_output(
         since=since,
         notes=notes[:20],

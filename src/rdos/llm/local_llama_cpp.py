@@ -30,7 +30,11 @@ class LocalLlamaCppAdapter(LLMAdapter):
     ) -> None:
         self._base = base_url.rstrip("/")
         self._model = model
-        self._api_key = api_key or os.environ.get("LOCAL_LLM_API_KEY", "local-dev-key")
+        self._api_key = (
+            api_key
+            or os.environ.get("RDOS_LOCAL_MODEL_API_KEY")
+            or os.environ.get("LOCAL_LLM_API_KEY", "local-dev-key")
+        )
         self._timeout = timeout
 
     @property

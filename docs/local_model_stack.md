@@ -6,8 +6,8 @@ RDOS 開發環境可用的本地模型端點。本機参考使用，正式 confi
 
 | 服務 | URL | Model | 用途 |
 | --- | --- | --- | --- |
-| Chat (reasoning) | `http://10.10.10.12:8080` | `qwythos-9b-q4` | Batch 6 Local LLM Adapter |
-| Embedding | `http://10.10.10.12:8081` | `bge-m3-q8_0` | Batch 3 向量 index（取代 fake embedding） |
+| Chat (reasoning) | `http://localhost:8080` | `qwythos-9b-q4` | Batch 6 Local LLM Adapter |
+| Embedding | `http://localhost:8081` | `bge-m3-q8_0` | Batch 3 向量 index（取代 fake embedding） |
 
 - Auth header：`Authorization: Bearer local-dev-key`
 - 兩個服務皆為 OpenAI-compatible API。
@@ -17,8 +17,8 @@ RDOS 開發環境可用的本地模型端點。本機参考使用，正式 confi
 先確認兩個服務都通：
 
 ```bash
-curl http://10.10.10.12:8080/health
-curl http://10.10.10.12:8081/health
+curl http://localhost:8080/health
+curl http://localhost:8081/health
 ```
 
 ## 2. Chat（8080）
@@ -26,7 +26,7 @@ curl http://10.10.10.12:8081/health
 ### 基本問答
 
 ```bash
-curl http://10.10.10.12:8080/v1/chat/completions \
+curl http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer local-dev-key" \
   -d '{
@@ -39,7 +39,7 @@ curl http://10.10.10.12:8080/v1/chat/completions \
 ### Streaming
 
 ```bash
-curl -N http://10.10.10.12:8080/v1/chat/completions \
+curl -N http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer local-dev-key" \
   -d '{
@@ -59,7 +59,7 @@ curl -N http://10.10.10.12:8080/v1/chat/completions \
 ### 單筆
 
 ```bash
-curl http://10.10.10.12:8081/v1/embeddings \
+curl http://localhost:8081/v1/embeddings \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer local-dev-key" \
   -d '{
@@ -71,7 +71,7 @@ curl http://10.10.10.12:8081/v1/embeddings \
 ### Batch（多筆一次，效率高）
 
 ```bash
-curl http://10.10.10.12:8081/v1/embeddings \
+curl http://localhost:8081/v1/embeddings \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer local-dev-key" \
   -d '{
@@ -101,12 +101,12 @@ curl http://10.10.10.12:8081/v1/embeddings \
 ## `.env.example` 對應欄位
 
 ```bash
-LOCAL_LLM_BASE_URL=http://10.10.10.12:8080
+LOCAL_LLM_BASE_URL=http://localhost:8080
 LOCAL_LLM_MODEL=qwythos-9b-q4
 LOCAL_LLM_API_KEY=local-dev-key
 
-LOCAL_EMBED_BASE_URL=http://10.10.10.12:8081
-LOCAL_EMBED_MODEL=bge-m3-q8_0
-LOCAL_EMBED_API_KEY=local-dev-key
-LOCAL_EMBED_DIM=1024
+RDOS_LOCAL_EMBEDDING_BASE_URL=http://localhost:8081
+RDOS_LOCAL_EMBEDDING_MODEL=bge-m3-q8_0
+RDOS_LOCAL_MODEL_API_KEY=local-dev-key
+RDOS_LOCAL_EMBEDDING_DIM=1024
 ```

@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-BASE_URL="${LOCAL_LLM_BASE_URL:-http://10.10.10.12:8080}"
+BASE_URL="${LOCAL_LLM_BASE_URL:-http://localhost:8080}"
 MODEL="${LOCAL_LLM_MODEL:-qwythos-9b-q4}"
 API_KEY="${LOCAL_LLM_API_KEY:-local-dev-key}"
 

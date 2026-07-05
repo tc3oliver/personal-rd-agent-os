@@ -815,7 +815,7 @@ Model Router 是本專案不被模型限制的核心。
 models:
   local_fast:
     provider: openai_compatible
-    base_url: http://10.10.10.12:8080/v1
+    base_url: http://localhost:8080/v1
     model: qwythos-9b-q4
     strengths:
       - low_cost

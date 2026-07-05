@@ -47,6 +47,12 @@ data/traces/*
 data/reports/*
 !data/reports/.gitkeep
 
+# Batch 24: generated outputs and runtime-looking samples
+data/generated/*
+!data/generated/.gitkeep
+data/samples/trace_sample.jsonl
+data/samples/runs.jsonl
+
 # uv lock — keep tracked
 # uv.lock
 

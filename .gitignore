@@ -28,8 +28,14 @@ htmlcov/
 
 # Audit fix (Batch 18): runtime SQLite for approvals must not be tracked
 data/approvals.db
+data/approvals.db-shm
+data/approvals.db-wal
 data/checkpoints.db
+data/checkpoints.db-shm
+data/checkpoints.db-wal
 data/threads.db
+data/threads.db-shm
+data/threads.db-wal
 
 .DS_Store
 .idea/

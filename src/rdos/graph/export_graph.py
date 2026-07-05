@@ -40,13 +40,18 @@ class ExportGraphState(TypedDict, total=False):
 
 
 def _synthesize(state: ExportGraphState, *, cfg: RdosConfig, llm: LLMAdapter) -> dict[str, Any]:
-    out, md = run_synthesis(
+    out, md_path = run_synthesis(
         cfg=cfg,
         question=state["question"],
         embedding_provider=None,
         llm=llm,
     )
-    return {"synthesis_md": md, "synthesis_path": md}
+    # Read the actual markdown content so export_report writes content,
+    # not the file path. (Validation A found this was writing the path.)
+    from pathlib import Path
+
+    md_content = Path(md_path).read_text(encoding="utf-8") if Path(md_path).exists() else ""
+    return {"synthesis_md": md_content, "synthesis_path": md_path}
 
 
 def _make_request(

@@ -1,0 +1,25 @@
+# Redaction configuration — controls which recognizers run and how replacements look.
+
+enabled_recognizers:
+  - EMAIL
+  - PHONE_TW
+  - ID_TW
+  - URL
+  - COMPANY_HINT
+  - IP
+  - CREDIT_CARD
+  - ADDRESS_TW
+
+# Hand-curated. Add internal codenames / product names here.
+company_names:
+  - RDOS_INTERNAL
+  - ProjectKepler
+  - 產品X
+  - 公司A
+
+# Replacement strategies:
+#   placeholder  → [REDACTED-EMAIL], [REDACTED-PHONE-TW], ...
+#   mask         → j***@e***.com
+#   hash         → [REDACTED-a1b2c3d4]
+replacement_strategy: placeholder
+placeholder_format: "[REDACTED-{TYPE}]"

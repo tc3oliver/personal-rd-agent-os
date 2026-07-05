@@ -26,6 +26,17 @@ htmlcov/
 .env.local
 .env.*.local
 
+# Audit fix (Batch 18): runtime SQLite for approvals must not be tracked
+data/approvals.db
+data/approvals.db-shm
+data/approvals.db-wal
+data/checkpoints.db
+data/checkpoints.db-shm
+data/checkpoints.db-wal
+data/threads.db
+data/threads.db-shm
+data/threads.db-wal
+
 .DS_Store
 .idea/
 .vscode/
@@ -41,6 +52,12 @@ data/traces/*
 !data/traces/.gitkeep
 data/reports/*
 !data/reports/.gitkeep
+
+# Batch 24: generated outputs and runtime-looking samples
+data/generated/*
+!data/generated/.gitkeep
+data/samples/trace_sample.jsonl
+data/samples/runs.jsonl
 
 # uv lock — keep tracked
 # uv.lock

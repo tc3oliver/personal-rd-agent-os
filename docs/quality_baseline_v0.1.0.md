@@ -32,13 +32,15 @@ Tool: `uv run rdos eval all` against `sample_data/notes` + `fake` provider.
 | `rag_recall_at_5` | ≥ 0.75 | 1.0000 | PASS |
 | `citation_accuracy` | ≥ 0.70 | 0.8000 | PASS |
 | `valid_chunk_reference_rate` | ≥ 0.95 | 1.0000 | PASS |
-| `structured_output_json_validity` | ≥ 0.95 | 1.0000 | PASS |
+| `structured_output_json_validity` | ≥ 0.95 | 1.0000 ⚠️ hardcoded | PASS (audit-confirmed hardcoded; real measurement is Batch 18.5) |
 | `model_routing_correct_rate` | ≥ 0.85 | 1.0000 | PASS |
 | `privacy_policy_compliance` | = 1.00 | 1.0000 | PASS |
 | `private_raw_leakage_rate` | = 0 | 0.0000 | PASS |
 | `company_sensitive_leakage_rate` | = 0 | 0.0000 | PASS |
 
 **Verdict: PASS (8/8).** This is the contract for tagging `v0.1.0-foundation`.
+
+> ⚠️ **Audit finding (P1-3)**: `structured_output_json_validity` is hardcoded to `1.0` in `cli/eval.py:38-41`. The real measurement (validating `model_dump_json()` round-trip) is shipped in Batch 18.5. Until then, treat this metric as a stub.
 
 ## 4. Real corpus benchmark results
 

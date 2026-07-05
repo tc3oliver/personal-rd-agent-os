@@ -12,6 +12,19 @@ retrieval:
   keyword_weight: 0.4
   min_score: 0.10
   rrf_k: 60                # Reciprocal Rank Fusion constant
+  # Batch 13 / Batch 23 audit P1-5: surface all retrieval knobs explicitly.
+  # Defaults match `rdos.config.RetrievalConfig` so config-driven behavior
+  # is visible to operators without reading source code.
+  vector_top_k: 20         # semantic channel candidate pool
+  keyword_top_k: 20        # keyword channel candidate pool
+  rerank_top_k: 8          # post-RRF top-K passed to caller
+  min_score_threshold: 0.02
+  # Batch 23 audit P1-4: no-answer threshold is explicit and disabled by
+  # default. RRF scores in v1.0 hover around 0.005–0.015 on the clawd-research
+  # corpus. Set to a calibrated value (e.g. 0.008) only after running
+  # `rdos eval no-answer` against the target corpus.
+  no_answer_threshold: 0.0  # 0.0 = disabled; calibrate before enabling
+  enable_query_rewrite: true
 
 embedding:
   dim: 1024

@@ -1,0 +1,30 @@
+{"id":"na-001","question":"XYZFakePaper2026 的核心方法是什麼？","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-002","question":"我有沒有整理過 QQZZXX2024 的筆記？","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-003","question":"ZZZNonexistentStudy 的實驗結果","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-004","question":"FoobarBaz2027 框架的設計理念","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-005","question":"AcmeCorpInternalTool2026 內部架構","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-006","question":"AlphaMetaRAG2029 與 GraphRAG 的差異","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-007","question":"QWERTY-LLM 的訓練資料","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-008","question":"PseudoSynthesis2025 演算法","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-009","question":"NonExistentMethod 的 pseudocode","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-010","question":"DreamEvalBenchmark2099 的 metric","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"fabricated_paper"}
+{"id":"na-011","question":"GraphRAG 在生物學蛋白質折疊的應用","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-012","question":"AgentTrace 用於氣象預報","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-013","question":"bge-m3 用於美食食譜推薦","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-014","question":"LangGraph 在農業灌溉排程","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-015","question":"Hybrid RRF 在音樂作曲","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-016","question":"Citation Validator 在法律判決預測","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-017","question":"Privacy Router 在保險理賠","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-018","question":"SQLite FTS5 在 DNA 定序","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-019","question":"qwythos-9b 用於日語俳句生成","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-020","question":"FakeEmbeddingProvider 在自動駕駛","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"concept_drift"}
+{"id":"na-021","question":"AgentTrase 是什麼？","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"misspelling"}
+{"id":"na-022","question":"GraphRag 和 VectorRag 的差異","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"misspelling"}
+{"id":"na-023","question":"ArgusLLM GARVIS 框架","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"misspelling"}
+{"id":"na-024","question":"Litmus FlightRecord 設計","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"misspelling"}
+{"id":"na-025","question":"LanceDB vector database 比較 Pinecone","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}
+{"id":"na-026","question":"Postgres pgvector 設定","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}
+{"id":"na-027","question":"kubernetes 部署 RDOS","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}
+{"id":"na-028","question":"Docker compose raspberry pi","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}
+{"id":"na-029","question":"React frontend integration","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}
+{"id":"na-030","question":"AWS Lambda deployment RDOS","expected_topics":[],"expected_keywords":[],"expected_files":[],"answer_type":"no_answer","category":"out_of_scope"}

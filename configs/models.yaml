@@ -4,9 +4,9 @@
 profiles:
   local_fast:
     provider: local
-    base_url: ${LOCAL_LLM_BASE_URL}
-    model: ${LOCAL_LLM_MODEL}
-    api_key_env: LOCAL_LLM_API_KEY
+    base_url: ${RDOS_LOCAL_CHAT_BASE_URL}
+    model: ${RDOS_LOCAL_CHAT_MODEL}
+    api_key_env: RDOS_LOCAL_MODEL_API_KEY
     max_tokens: 4096
     temperature: 0.3
     allows_tools: false
@@ -51,9 +51,11 @@ task_defaults:
   code_analysis: code_specialist
 
 # Embedding provider config
+# Batch 18 audit fix: align with RDOS_LOCAL_EMBEDDING_* env names declared in .env.example.
+# Legacy LOCAL_EMBED_* names kept as fallback aliases (set in .env if needed).
 embedding:
   provider: fake  # fake | local | openai
-  base_url: ${LOCAL_EMBED_BASE_URL}
-  model: ${LOCAL_EMBED_MODEL}
-  api_key_env: LOCAL_EMBED_API_KEY
+  base_url: ${RDOS_LOCAL_EMBEDDING_BASE_URL}
+  model: ${RDOS_LOCAL_EMBEDDING_MODEL}
+  api_key_env: RDOS_LOCAL_MODEL_API_KEY
   dim: 1024

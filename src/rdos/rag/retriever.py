@@ -32,6 +32,7 @@ class RetrievalResult:
     merged_scores: dict[str, float]
     rewrite_info: dict = field(default_factory=dict)
     no_answer_triggered: bool = False
+    no_answer_reason: str = ""
     retrieval_latency_ms: int = 0
 
     @property
@@ -119,7 +120,18 @@ class HybridRetriever:
         threshold = self.config.rag.retrieval.min_score_threshold
         no_answer_threshold = self.config.rag.retrieval.no_answer_threshold
         top_score = chunks[0].score if chunks else 0.0
-        no_answer = bool(chunks) and top_score < no_answer_threshold
+        no_answer_reason = ""
+        if no_answer_threshold > 0 and chunks and top_score < no_answer_threshold:
+            no_answer = True
+            no_answer_reason = (
+                f"top_score={top_score:.4f} < threshold={no_answer_threshold:.4f}"
+            )
+        elif not chunks:
+            no_answer = True
+            no_answer_reason = "no chunks retrieved"
+        else:
+            no_answer = False
+
         if no_answer:
             chunks = []
 
@@ -135,6 +147,7 @@ class HybridRetriever:
             merged_scores=merged,
             rewrite_info=rewrite_info,
             no_answer_triggered=no_answer,
+            no_answer_reason=no_answer_reason,
             retrieval_latency_ms=latency_ms,
         )
 
